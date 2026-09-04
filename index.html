@@ -4,29 +4,53 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Schedule an appointment | Medicare.gov (prototype)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root {
-  /* Liz/DS: body floor 20px (body-large); 16px=1rem for labels/disclaimers only */
-  --primary: #0071bc;
-  --primary-darker: #004f84;
-  --primary-darkest: #00395e;
-  --primary-lightest: #e6f1f8;
-  --base: #262626;
-  --gray-lightest: #f2f2f2;
-  --gray-lighter: #d9d9d9;
-  --gray-dark: #5a5a5a;
-  --success: #12890e;
-  --success-lightest: #f6faf5;
-  --error: #e31c3d;
-  --warn: #f8c41f;
-  --info: #02bfe7;
-  --white: #fff;
-  --inverse: #00395e;
-  --focus: #02bfe7;
+  /* Medicare Green — primary (replaces Ocean blue) */
+  --color-primary-darkest: #0A352F;   /* 600 pressed */
+  --color-primary-darker: #1D4E45;    /* 500 hover */
+  --color-primary: #146A5D;           /* 400 default / focus / controls */
+  --color-primary-light: #72A69E;     /* 300 */
+  --color-primary-lightest: #E8F0EF;  /* 200 pressed secondary / icon bg / row select */
+  --color-surface: #F4F7F5;           /* 100 surface + secondary hover + row hover */
+
+  /* Medicare Blue — secondary (pills / alerts) */
+  --color-secondary-darker: #0B2F52;
+  --color-secondary-dark: #0E3E6E;
+  --color-secondary: #2A6FB8;
+  --color-secondary-light: #BFD4EA;
+  --color-secondary-lighter: #DCEAF5;
+  --color-secondary-lightest: #EAF3FA;
+
+  /* Grayscale */
+  --color-black: #000000;
+  --color-gray-darkest: #262626;
+  --color-gray-darker: #404040;
+  --color-gray-dark: #5A5A5A;
+  --color-gray: #808080;
+  --color-gray-light: #A6A6A6;
+  --color-gray-lighter: #D9D9D9;
+  --color-gray-lightest: #F2F2F2;
+  --color-white: #FFFFFF;
+
+  /* Status */
+  --color-error: #B20000;
+  --color-error-lightest: #F7E6E6;
+  --color-warn: #F8C41F;
+  --color-warn-outline: #C97532;
+  --color-warn-lightest: #FEF9E9;
+  --color-success: #12890E;
+  --color-success-lightest: #F6FAF5;
+
   --radius: 8px;
-  --shadow: 0 2px 8px rgba(0,0,0,.12);
+  --radius-lg: 12px;
+  --shadow: 0 2px 8px rgba(10, 53, 47, .08);
   --max: 1100px;
-  --font: "Open Sans", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --focus: #2A6FB8;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -37,63 +61,65 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--font);
-  font-size: 20px;
-  line-height: 1.5;
-  color: var(--base);
-  background: var(--gray-lightest);
+  font-size: 1.25rem; /* Body Large 20px floor */
+  line-height: 1.5; /* 30px */
+  color: var(--color-gray-darkest);
+  background: var(--color-surface);
   min-height: 100vh;
 }
 img, svg { max-width: 100%; }
-a { color: var(--primary-darker); }
-a:hover { color: var(--primary-darkest); }
+a { color: var(--color-primary); }
+a:hover { color: var(--color-primary-darker); }
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 .skip-link {
   position: absolute; left: -9999px; top: 0; z-index: 1000;
-  background: var(--warn); color: var(--base); padding: 12px 16px; font-weight: 700;
+  background: var(--color-warn); color: var(--color-gray-darkest); padding: 12px 16px; font-weight: 600;
 }
 .skip-link:focus { left: 8px; top: 8px; }
-/* USA banner */
+
 .usa-banner {
-  background: #f0f0f0; border-bottom: 1px solid var(--gray-lighter);
-  font-size: 14px; color: var(--base);
+  background: var(--color-gray-lightest); border-bottom: 1px solid var(--color-gray-lighter);
+  font-size: 1rem; color: var(--color-gray-darker);
 }
 .usa-banner__inner {
   max-width: var(--max); margin: 0 auto; padding: 6px 16px;
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
 }
 .usa-banner__flag { width: 16px; height: 11px; background: linear-gradient(#b22234 33%, #fff 33% 66%, #3c3b6e 66%); border: 1px solid #ccc; flex-shrink: 0; }
-/* Header */
+
 .site-header {
-  background: var(--inverse); color: var(--white);
-  border-bottom: 4px solid var(--primary);
+  background: var(--color-primary-darkest); color: var(--color-white);
+  border-bottom: 4px solid var(--color-primary);
 }
 .site-header__inner {
   max-width: var(--max); margin: 0 auto; padding: 12px 16px;
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
 }
-.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--white); min-height: 44px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--color-white); min-height: 44px; }
 .brand__mark {
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--primary); display: grid; place-items: center;
-  font-weight: 800; font-size: 14px; letter-spacing: -.02em;
+  background: var(--color-primary); display: grid; place-items: center;
+  font-weight: 700; font-size: 14px; letter-spacing: -.02em;
 }
-.brand__text { font-size: 20px; font-weight: 700; line-height: 1.2; }
-.brand__sub { display: block; font-size: 13px; font-weight: 400; opacity: .9; }
-.header-actions { display: flex; gap: 8px; align-items: center; }
+.brand__text { font-size: 1.25rem; font-weight: 600; line-height: 1.2; letter-spacing: -.02em; }
+.brand__sub { display: block; font-size: 1rem; font-weight: 400; opacity: .9; letter-spacing: 0; }
+.header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .header-actions button, .header-actions a {
   min-height: 44px; min-width: 44px; padding: 8px 14px;
   background: transparent; border: 1px solid rgba(255,255,255,.45);
-  color: var(--white); border-radius: 4px; font: inherit; font-size: 16px;
+  color: var(--color-white); border-radius: 999px; font: inherit; font-size: 1rem; font-weight: 600;
   cursor: pointer; text-decoration: none; display: inline-flex; align-items: center;
 }
 .header-actions button:hover, .header-actions a:hover { background: rgba(255,255,255,.1); }
-/* Nav strip */
-.app-nav {
-  background: var(--white); border-bottom: 1px solid var(--gray-lighter);
+.header-actions .btn-chat {
+  background: var(--color-primary); border-color: var(--color-primary);
 }
+.header-actions .btn-chat:hover { background: var(--color-primary-darker); border-color: var(--color-primary-darker); }
+
+.app-nav { background: var(--color-white); border-bottom: 1px solid var(--color-gray-lighter); }
 .app-nav__inner {
   max-width: var(--max); margin: 0 auto; padding: 0 8px;
   display: flex; gap: 4px; overflow-x: auto;
@@ -101,204 +127,335 @@ a:hover { color: var(--primary-darkest); }
 .app-nav button {
   flex: 0 0 auto; min-height: 48px; padding: 10px 14px;
   border: 0; border-bottom: 3px solid transparent;
-  background: transparent; font: inherit; font-size: 16px; color: var(--primary-darker);
+  background: transparent; font: inherit; font-size: 1rem; color: var(--color-primary-darker);
   cursor: pointer; font-weight: 600;
 }
 .app-nav button[aria-current="page"] {
-  border-bottom-color: var(--primary); color: var(--primary-darkest);
+  border-bottom-color: var(--color-primary); color: var(--color-primary-darkest);
 }
-/* Main layout */
+
 .wrap { max-width: var(--max); margin: 0 auto; padding: 16px; }
 main { min-height: 60vh; }
 .view { display: none; }
 .view.is-active { display: block; }
 .live { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
-h1 { font-size: 1.55rem; line-height: 1.25; margin: 0 0 8px; color: var(--primary-darkest); }
-h2 { font-size: 1.25rem; margin: 0 0 8px; color: var(--primary-darkest); }
-h3 { font-size: 1.1rem; margin: 0 0 6px; }
-.lede { color: var(--gray-dark); margin: 0 0 20px; font-size: 1rem; }
-.muted { color: var(--gray-dark); font-size: .95rem; }
-.card {
-  background: var(--white); border: 1px solid var(--gray-lighter);
-  border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); margin-bottom: 16px;
+
+h1 {
+  font-size: 1.75rem; /* 28px mobile H4-ish */
+  line-height: 1.3; letter-spacing: -.04em; font-weight: 600;
+  margin: 0 0 8px; color: var(--color-gray-darkest);
 }
-.card--accent { border-left: 4px solid var(--primary); }
-.card--success { border-left: 4px solid var(--success); background: var(--success-lightest); }
-.card--warn { border-left: 4px solid var(--warn); background: #fffbeb; }
-.card--error { border-left: 4px solid var(--error); background: #fef7f7; }
-.card--info { border-left: 4px solid var(--info); background: #e7f6f8; }
-/* Buttons */
+h2 { font-size: 1.5rem; line-height: 1.3; letter-spacing: -.02em; font-weight: 600; margin: 0 0 8px; color: var(--color-gray-darkest); }
+h3 { font-size: 1.25rem; line-height: 1.3; letter-spacing: -.02em; font-weight: 600; margin: 0 0 6px; }
+.lede { color: var(--color-gray-darker); margin: 0 0 20px; font-size: 1.25rem; }
+.muted { color: var(--color-gray-darker); }
+.label-text, .field, .field-help, .step-crumb, .trust-bar__title, .slots-label, .confirm-list strong, .usa-banner, .footer, .chip--trust, .badge, .section-kicker {
+  font-size: 1rem; /* 16px labels / disclaimers */
+}
+
+.card {
+  background: var(--color-white); border: 1px solid var(--color-gray-light);
+  border-radius: var(--radius-lg); padding: 16px; box-shadow: var(--shadow); margin-bottom: 16px;
+}
+.card--accent { border-left: 4px solid var(--color-primary); }
+.card--success { border: 1px solid var(--color-success); background: var(--color-success-lightest); }
+.card--warn { border: 1px solid var(--color-warn-outline); background: var(--color-warn-lightest); }
+.card--error { border: 1px solid var(--color-error); background: var(--color-error-lightest); }
+.card--info { border: 1px solid var(--color-secondary-dark); background: var(--color-secondary-lightest); }
+.card--hover:hover { background: var(--color-surface); }
+
+.alert {
+  display: flex; gap: 12px; align-items: flex-start;
+  border-radius: var(--radius-lg); padding: 14px 16px; margin: 0 0 16px;
+  border: 1px solid var(--color-secondary-dark); background: var(--color-secondary-lightest);
+}
+.alert__icon { flex-shrink: 0; width: 24px; height: 24px; margin-top: 2px; color: var(--color-secondary-dark); }
+.alert--warn { border-color: var(--color-warn-outline); background: var(--color-warn-lightest); }
+.alert--warn .alert__icon { color: var(--color-warn-outline); }
+.alert--error { border-color: var(--color-error); background: var(--color-error-lightest); }
+.alert--error .alert__icon { color: var(--color-error); }
+.alert--success { border-color: var(--color-success); background: var(--color-success-lightest); }
+.alert--success .alert__icon { color: var(--color-success); }
+.alert p { margin: 0; }
+.alert strong { display: block; margin-bottom: 4px; }
+
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 48px; padding: 12px 20px; border-radius: 4px;
-  font: inherit; font-size: 18px; font-weight: 700; cursor: pointer;
+  min-height: 48px; padding: 12px 20px; border-radius: var(--radius);
+  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
   border: 2px solid transparent; text-decoration: none; text-align: center;
 }
-.btn--primary { background: var(--primary); color: var(--white); border-color: var(--primary); }
-.btn--primary:hover { background: var(--primary-darker); border-color: var(--primary-darker); }
-.btn--primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn--primary { background: var(--color-primary); color: var(--color-white); border-color: var(--color-primary); }
+.btn--primary:hover { background: var(--color-primary-darker); border-color: var(--color-primary-darker); }
+.btn--primary:active { background: var(--color-primary-darkest); border-color: var(--color-primary-darkest); }
+.btn--primary:disabled, .btn:disabled {
+  background: var(--color-gray-light); border-color: var(--color-gray-light);
+  color: var(--color-gray-darker); cursor: not-allowed;
+}
 .btn--secondary {
-  background: var(--white); color: var(--primary-darker);
-  border-color: var(--primary);
+  background: var(--color-white); color: var(--color-primary);
+  border-color: var(--color-primary);
 }
-.btn--secondary:hover { background: var(--primary-lightest); }
+.btn--secondary:hover { background: var(--color-surface); }
+.btn--secondary:active { background: var(--color-primary-lightest); }
 .btn--ghost {
-  background: var(--gray-lightest); color: var(--base);
-  border-color: var(--gray-lighter); font-weight: 600;
+  background: transparent; color: var(--color-primary);
+  border-color: transparent; font-weight: 600;
 }
-.btn--ghost:hover { background: var(--gray-lighter); }
+.btn--ghost:hover { background: var(--color-surface); }
 .btn--block { width: 100%; }
-.btn--sm { min-height: 44px; padding: 8px 14px; font-size: 16px; }
+.btn--sm { min-height: 44px; padding: 8px 14px; }
 .btn-row { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 .sticky-cta {
-  position: sticky; bottom: 0; background: var(--white);
-  border-top: 1px solid var(--gray-lighter); padding: 12px 16px;
-  margin: 24px -16px -16px; box-shadow: 0 -4px 12px rgba(0,0,0,.06);
+  position: sticky; bottom: 0; background: var(--color-white);
+  border-top: 1px solid var(--color-gray-lighter); padding: 12px 16px;
+  margin: 24px -16px -16px; box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
 }
-/* Chips */
+
 .chip-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 20px; }
 .chip {
-  min-height: 48px; padding: 10px 16px; border-radius: 999px;
-  border: 2px solid var(--gray-lighter); background: var(--white);
-  font: inherit; font-size: 16px; font-weight: 600; color: var(--base);
+  min-height: 44px; padding: 10px 16px; border-radius: 999px;
+  border: 2px solid var(--color-gray-light); background: var(--color-white);
+  font: inherit; font-size: 1rem; font-weight: 600; color: var(--color-gray-darkest);
   cursor: pointer; text-align: left;
 }
-.chip:hover { border-color: var(--primary); background: var(--primary-lightest); }
+.chip:hover { border-color: var(--color-primary); background: var(--color-surface); }
 .chip.is-selected, .chip[aria-pressed="true"] {
-  border-color: var(--primary-darker); background: var(--primary-lightest);
-  color: var(--primary-darkest); box-shadow: inset 0 0 0 1px var(--primary);
+  border-color: var(--color-primary); background: var(--color-primary);
+  color: var(--color-white);
 }
 .chip--trust {
-  border-color: var(--success); background: var(--success-lightest);
-  color: var(--success); cursor: default; font-size: 14px; min-height: 36px; padding: 6px 12px;
+  border-color: var(--color-success); background: var(--color-success-lightest);
+  color: var(--color-success); cursor: default; min-height: 36px; padding: 6px 12px;
 }
-.chip--trust.is-locked::after { content: " ✓"; font-weight: 800; }
+.chip--trust.is-off {
+  border-color: var(--color-warn-outline); background: var(--color-warn-lightest);
+  color: var(--color-warn-outline);
+}
+.chip--trust.is-locked::after { content: " ✓"; font-weight: 700; }
+.chip--chronic[aria-pressed="true"] {
+  background: var(--color-secondary-dark); border-color: var(--color-secondary-dark);
+  color: var(--color-white);
+}
 .chip--slot {
-  border-radius: 8px; min-width: 92px; flex-direction: column; align-items: center;
+  border-radius: var(--radius); min-width: 92px; flex-direction: column; align-items: center;
   display: inline-flex; gap: 2px; padding: 10px 12px;
 }
-.chip--slot .day { font-size: 13px; color: var(--gray-dark); font-weight: 600; text-transform: uppercase; }
-.chip--slot .time { font-size: 16px; font-weight: 800; color: var(--primary-darkest); }
-.chip--slot.chip--hero {
-  min-width: 110px; min-height: 64px; padding: 12px 16px;
-  border-width: 2px; border-color: var(--primary);
-}
-.chip--slot.chip--hero .time { font-size: 20px; }
+.chip--slot .day { font-size: 1rem; color: var(--color-gray-darker); font-weight: 600; text-transform: uppercase; }
+.chip--slot .time { font-size: 1rem; font-weight: 600; color: var(--color-primary-darkest); }
+.chip--slot.chip--hero { min-width: 110px; min-height: 64px; padding: 12px 16px; border-color: var(--color-primary); }
 .chip--slot.is-empty { opacity: .55; cursor: not-allowed; border-style: dashed; }
-.chip--slot.is-selected { background: var(--primary); color: var(--white); border-color: var(--primary-darker); }
-.chip--slot.is-selected .day, .chip--slot.is-selected .time { color: var(--white); }
-/* Forms */
-label.field { display: block; font-weight: 700; margin-bottom: 6px; }
-input[type="text"], input[type="search"], textarea, select {
+.chip--slot.is-selected { background: var(--color-primary); color: var(--color-white); border-color: var(--color-primary-darker); }
+.chip--slot.is-selected .day, .chip--slot.is-selected .time { color: var(--color-white); }
+
+.reason-list { display: flex; flex-direction: column; gap: 10px; margin: 12px 0 20px; }
+.reason {
+  width: 100%; min-height: 52px; padding: 14px 16px;
+  border-radius: var(--radius-lg); border: 1px solid var(--color-gray-light);
+  background: var(--color-white); font: inherit; font-size: 1.25rem; font-weight: 400;
+  color: var(--color-gray-darkest); cursor: pointer; text-align: left;
+  box-shadow: var(--shadow);
+}
+.reason:hover { border-color: var(--color-primary); background: var(--color-surface); }
+.reason.is-selected {
+  border-color: var(--color-primary); background: var(--color-primary-lightest);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+  font-weight: 600;
+}
+
+.choice-grid { display: flex; flex-direction: column; gap: 12px; margin: 12px 0 20px; }
+.choice {
+  width: 100%; min-height: 72px; padding: 16px;
+  border-radius: var(--radius-lg); border: 2px solid var(--color-gray);
+  background: var(--color-white); font: inherit; text-align: left; cursor: pointer;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.choice:hover { border-color: var(--color-primary); background: var(--color-surface); }
+.choice.is-selected {
+  border-color: var(--color-primary); background: var(--color-primary-lightest);
+}
+.choice__radio {
+  width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--color-gray-dark);
+  flex-shrink: 0; margin-top: 4px; display: grid; place-items: center;
+}
+.choice.is-selected .choice__radio {
+  border-color: var(--color-primary); background: var(--color-primary);
+  box-shadow: inset 0 0 0 3px var(--color-white);
+}
+.choice strong { display: block; font-weight: 600; }
+.choice span { display: block; color: var(--color-gray-darker); font-size: 1.25rem; margin-top: 2px; }
+
+.segmented {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 2px solid var(--color-primary); border-radius: var(--radius); overflow: hidden; margin: 12px 0 20px;
+}
+.segmented button {
+  min-height: 48px; border: 0; background: var(--color-white); color: var(--color-primary);
+  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; padding: 10px 8px;
+}
+.segmented button + button { border-left: 2px solid var(--color-primary); }
+.segmented button[aria-pressed="true"] {
+  background: var(--color-primary); color: var(--color-white);
+}
+
+label.field { display: block; font-weight: 600; margin-bottom: 6px; color: var(--color-gray-darkest); }
+input[type="text"], input[type="search"], input[type="tel"], textarea, select {
   width: 100%; min-height: 48px; padding: 10px 14px;
-  border: 2px solid var(--gray-lighter); border-radius: 4px;
-  font: inherit; font-size: 18px; background: var(--white); color: var(--base);
+  border: 2px solid var(--color-gray); border-radius: var(--radius);
+  font: inherit; font-size: 1.25rem; background: var(--color-white); color: var(--color-gray-darkest);
 }
-textarea { min-height: 100px; resize: vertical; }
+textarea { min-height: 100px; resize: vertical; font-size: 1.25rem; }
 input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 3px solid var(--focus); outline-offset: 0; border-color: var(--primary);
+  outline: 3px solid var(--focus); outline-offset: 0; border-color: var(--color-primary);
 }
-.field-help { font-size: 15px; color: var(--gray-dark); margin: 4px 0 12px; }
-/* Provider card */
-.provider {
-  display: grid; gap: 12px;
+input.is-error { border-color: var(--color-error); }
+.field-help { color: var(--color-gray-darker); margin: 4px 0 12px; }
+
+.search-wrap { position: relative; margin-bottom: 8px; }
+.search-wrap .search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--color-gray-dark); pointer-events: none;
 }
+.search-wrap input { padding-left: 44px; }
+.suggest {
+  list-style: none; margin: 0 0 16px; padding: 0;
+  border: 1px solid var(--color-gray-light); border-radius: var(--radius);
+  background: var(--color-white); overflow: hidden;
+}
+.suggest[hidden] { display: none; }
+.suggest button {
+  width: 100%; text-align: left; min-height: 48px; padding: 10px 14px;
+  border: 0; border-bottom: 1px solid var(--color-gray-lighter);
+  background: var(--color-white); font: inherit; font-size: 1.25rem; cursor: pointer;
+}
+.suggest button:hover, .suggest button:focus { background: var(--color-primary-lightest); }
+.suggest button:last-child { border-bottom: 0; }
+.suggest .hit-spec { display: block; font-size: 1rem; color: var(--color-gray-darker); }
+
+.provider { display: grid; gap: 12px; }
 .provider__top { display: flex; gap: 14px; align-items: flex-start; }
+.provider__actions { display: flex; flex-direction: column; gap: 8px; }
 .avatar {
-  width: 64px; height: 64px; border-radius: 50%; flex-shrink: 0;
-  background: var(--primary-lightest); color: var(--primary-darkest);
-  display: grid; place-items: center; font-weight: 800; font-size: 20px;
-  border: 2px solid var(--primary);
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+  background: var(--color-primary-lightest); color: var(--color-primary);
+  display: grid; place-items: center; font-weight: 600; font-size: 1.25rem;
+  border: 2px solid var(--color-primary);
 }
 .provider__meta { flex: 1; min-width: 0; }
-.provider__name { margin: 0; font-size: 1.15rem; color: var(--primary-darkest); }
-.provider__spec { margin: 2px 0; color: var(--gray-dark); }
-.provider__row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 4px; font-size: 16px; }
-.stars { color: #b36b00; font-weight: 700; }
+.provider__name { margin: 0; font-size: 1.25rem; letter-spacing: -.02em; color: var(--color-gray-darkest); }
+.provider__spec { margin: 2px 0; color: var(--color-gray-darker); }
+.provider__row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 4px; font-size: 1rem; }
+.stars { color: var(--color-warn-outline); font-weight: 600; }
 .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .badge {
   display: inline-flex; align-items: center; gap: 4px;
-  font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
-  background: var(--success-lightest); color: var(--success); border: 1px solid #b7d9b4;
+  font-weight: 600; padding: 4px 10px; border-radius: 999px;
+  background: var(--color-success-lightest); color: var(--color-success); border: 1px solid #b7d9b4;
 }
-.badge--info { background: var(--primary-lightest); color: var(--primary-darker); border-color: #99c4e0; }
-.badge--warn { background: #fffbeb; color: #5c4800; border-color: var(--warn); }
+.badge--info { background: var(--color-secondary-lighter); color: var(--color-secondary-dark); border-color: var(--color-secondary-light); }
+.badge--warn { background: var(--color-warn-lightest); color: var(--color-warn-outline); border-color: var(--color-warn-outline); }
+.badge--plan { background: var(--color-primary-lightest); color: var(--color-primary-darker); border-color: var(--color-primary-light); }
 .slots-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.slots-label { font-weight: 700; font-size: 15px; margin: 8px 0 4px; color: var(--primary-darkest); }
-/* Trust bar */
+.slots-label { font-weight: 600; margin: 8px 0 4px; color: var(--color-gray-darkest); }
+
 .trust-bar {
   position: sticky; top: 0; z-index: 20;
-  background: var(--white); border: 1px solid var(--gray-lighter);
-  border-radius: var(--radius); padding: 12px; margin-bottom: 16px;
+  background: var(--color-white); border: 1px solid var(--color-gray-light);
+  border-radius: var(--radius-lg); padding: 12px; margin-bottom: 16px;
   box-shadow: var(--shadow);
 }
-.trust-bar__title { font-size: 15px; font-weight: 700; margin: 0 0 8px; color: var(--primary-darkest); }
+.trust-bar__title { font-weight: 600; margin: 0 0 8px; color: var(--color-gray-darkest); }
 .trust-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .trust-warn {
   display: none; margin-top: 10px; padding: 10px 12px;
-  background: #fffbeb; border: 1px solid var(--warn); border-radius: 4px; font-size: 15px;
+  background: var(--color-warn-lightest); border: 1px solid var(--color-warn-outline);
+  border-radius: var(--radius); font-size: 1rem; color: var(--color-warn-outline);
 }
 .trust-warn.is-open { display: block; }
 .more-options { margin-top: 10px; }
 .more-options[hidden] { display: none; }
-.more-options label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; }
-/* Desktop split */
+.more-options label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; font-size: 1.25rem; }
+.sheet-scrim {
+  display: none; position: fixed; inset: 0; background: rgba(10, 53, 47, .4); z-index: 40;
+}
+.sheet-scrim.is-open { display: block; }
+.filter-sheet {
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 41;
+  background: var(--color-white); border-radius: 16px 16px 0 0;
+  padding: 16px; max-height: 80vh; overflow: auto;
+  box-shadow: 0 -8px 24px rgba(10, 53, 47, .16);
+}
+.filter-sheet.is-open { display: block; }
+.filter-sheet h2 { font-size: 1.25rem; }
+
 .results-layout { display: grid; gap: 16px; }
 .summary-panel { display: none; }
 .map-placeholder {
-  height: 180px; background: linear-gradient(135deg, var(--primary-lightest), #dce9f2);
-  border: 1px dashed var(--primary); border-radius: var(--radius);
-  display: grid; place-items: center; color: var(--primary-darker); font-weight: 700; text-align: center; padding: 16px;
+  height: 160px; background: var(--color-secondary-lightest);
+  border: 1px dashed var(--color-secondary-dark); border-radius: var(--radius);
+  display: grid; place-items: center; color: var(--color-secondary-dark); font-weight: 600; text-align: center; padding: 16px;
 }
-/* Home */
-.greeting { margin-bottom: 8px; }
+
 .plan-note {
-  font-size: 15px; color: var(--gray-dark); background: var(--white);
-  border: 1px solid var(--gray-lighter); border-radius: var(--radius); padding: 12px; margin-bottom: 16px;
+  font-size: 1rem; color: var(--color-gray-darker); background: var(--color-white);
+  border: 1px solid var(--color-gray-light); border-radius: var(--radius-lg); padding: 12px; margin-bottom: 16px;
 }
-.appt-tile .appt-when { font-size: 1.15rem; font-weight: 800; color: var(--primary-darkest); margin: 4px 0; }
+.appt-tile .appt-when { font-size: 1.25rem; font-weight: 600; color: var(--color-primary-darkest); margin: 4px 0; }
 .appt-tile .appt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.step-crumb { font-size: 14px; color: var(--gray-dark); margin-bottom: 8px; font-weight: 600; }
+.step-crumb { color: var(--color-gray-darker); margin-bottom: 8px; font-weight: 600; }
+.progress { display: flex; gap: 6px; margin: 0 0 16px; }
+.progress span {
+  height: 6px; flex: 1; max-width: 48px; border-radius: 999px; background: var(--color-gray-lighter);
+}
+.progress span.is-on { background: var(--color-primary); }
 .back-link {
   display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
-  background: none; border: 0; color: var(--primary-darker); font: inherit; font-weight: 700; cursor: pointer; padding: 0;
+  background: none; border: 0; color: var(--color-primary); font: inherit; font-weight: 600; cursor: pointer; padding: 0;
 }
 .confirm-list { list-style: none; padding: 0; margin: 0 0 16px; }
-.confirm-list li { padding: 10px 0; border-bottom: 1px solid var(--gray-lighter); }
-.confirm-list strong { display: block; font-size: 14px; color: var(--gray-dark); text-transform: uppercase; letter-spacing: .02em; }
+.confirm-list li { padding: 10px 0; border-bottom: 1px solid var(--color-gray-lighter); }
+.confirm-list strong { display: block; color: var(--color-gray-darker); text-transform: uppercase; letter-spacing: .02em; }
 .empty-state { text-align: left; padding: 8px 0; }
 .demo-tools {
-  margin-top: 24px; padding: 12px; border: 1px dashed var(--gray-lighter);
-  border-radius: var(--radius); background: #fafafa; font-size: 15px;
+  margin-top: 24px; padding: 12px; border: 1px dashed var(--color-gray-light);
+  border-radius: var(--radius); background: var(--color-white); font-size: 1rem;
 }
-.demo-tools summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.demo-tools summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 .demo-tools .chip-grid { margin-top: 10px; }
 .footer {
   max-width: var(--max); margin: 0 auto; padding: 24px 16px 40px;
-  font-size: 14px; color: var(--gray-dark);
+  font-size: 1rem; color: var(--color-gray-darker);
 }
-.footer strong { color: var(--base); }
+.footer strong { color: var(--color-gray-darkest); }
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 .pill-metric {
-  display: inline-block; background: var(--primary-lightest); color: var(--primary-darkest);
-  font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+  display: inline-block; background: var(--color-primary-lightest); color: var(--color-primary-darkest);
+  font-size: 1rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
 }
+.section-kicker { font-weight: 600; color: var(--color-gray-darker); margin: 20px 0 4px; text-transform: uppercase; letter-spacing: .04em; }
+.mapped { margin: 0 0 16px; padding: 12px 14px; background: var(--color-secondary-lightest); border-radius: var(--radius); border: 1px solid var(--color-secondary-light); }
+
 @media (min-width: 960px) {
-  body { font-size: 18px; }
+  h1 { font-size: 2.25rem; } /* 36px H4 desktop */
   .wrap { padding: 24px 20px; }
-  h1 { font-size: 2rem; }
   .site-header__inner { padding: 16px 20px; }
-  .brand__text { font-size: 22px; }
   .btn-row { flex-direction: row; align-items: stretch; }
   .btn-row .btn { flex: 1; }
-  .results-layout { grid-template-columns: 1fr 320px; align-items: start; }
+  .choice-grid { flex-direction: row; }
+  .choice { flex: 1; }
+  .results-layout { grid-template-columns: 1fr 300px; align-items: start; }
   .summary-panel { display: block; position: sticky; top: 12px; }
   .sticky-cta { margin-left: 0; margin-right: 0; border-radius: var(--radius); }
-  .provider__top { gap: 18px; }
-  .avatar { width: 72px; height: 72px; font-size: 22px; }
+  .provider { grid-template-columns: 1fr auto; align-items: start; }
+  .provider__slots { grid-column: 1 / -1; }
+  .avatar { width: 64px; height: 64px; }
+  .filter-sheet {
+    left: auto; right: 24px; bottom: auto; top: 120px; width: 400px;
+    border-radius: var(--radius-lg); max-height: calc(100vh - 160px);
+  }
 }
 </style>
 </head>
@@ -320,7 +477,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
     </a>
     <div class="header-actions">
       <button type="button" id="btn-menu" aria-expanded="false" aria-controls="app-nav">Menu</button>
-      <button type="button" id="btn-logout" title="Stub">Log out</button>
+      <button type="button" id="btn-login" title="Stub">Log in</button>
+      <button type="button" class="btn-chat" id="btn-chat" title="Stub">Chat</button>
     </div>
   </div>
 </header>
@@ -329,7 +487,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   <div class="app-nav__inner">
     <button type="button" data-nav="home" aria-current="page">Home</button>
     <button type="button" data-nav="appointments">My appointments</button>
-    <button type="button" data-nav="need">Schedule</button>
+    <button type="button" data-nav="who">Schedule</button>
   </div>
 </nav>
 
@@ -337,27 +495,21 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   <div class="live" id="aria-live" aria-live="polite" aria-atomic="true"></div>
   <main id="main">
 
-    <!-- HOME -->
     <section class="view is-active" id="view-home" aria-labelledby="home-title">
       <p class="pill-metric">Goal: care need → booked in about 3 minutes</p>
-      <p class="greeting muted">Good evening, Diana</p>
+      <p class="muted greeting" id="home-greeting">Good evening, Diana</p>
       <h1 id="home-title">Your Medicare account</h1>
-      <p class="lede">Find in-plan care that’s accepting patients — without digging through messages.</p>
+      <p class="lede">Find care that’s in your plan and accepting patients — without digging through messages.</p>
 
-      <div class="plan-note" role="note">
-        <strong>Your coverage (sample):</strong> Medicare Advantage — Humana Gold Plus (HMO).
-        “In your plan” means this prototype’s mock network for Advantage.
-        On <em>Original Medicare</em>, most doctors who accept Medicare assignment are available; Advantage plans use a defined network.
-      </div>
-
+      <div class="plan-note" role="note" id="home-plan-note"></div>
       <div id="home-upcoming" hidden></div>
 
       <div class="card card--accent">
         <h2>Need care?</h2>
-        <p class="muted" style="margin-top:0">Tell us what’s going on. We’ll show providers in your plan who are accepting new patients.</p>
+        <p class="muted" style="margin-top:0">We’ll ask who it’s for, your coverage, and a ZIP — then what’s going on.</p>
         <div class="btn-row">
-          <button type="button" class="btn btn--primary" data-nav="need">Schedule an appointment</button>
-          <button type="button" class="btn btn--ghost" data-nav="someone">Book for someone I help</button>
+          <button type="button" class="btn btn--primary" data-nav="who">Schedule an appointment</button>
+          <button type="button" class="btn btn--secondary" id="home-someone">Book for someone I help</button>
         </div>
       </div>
 
@@ -374,12 +526,23 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
       </details>
     </section>
 
-    <!-- SOMEONE (secondary fork) -->
-    <section class="view" id="view-someone" aria-labelledby="someone-title">
+    <section class="view" id="view-who" aria-labelledby="who-title">
       <button type="button" class="back-link" data-nav="home">← Back to home</button>
-      <h1 id="someone-title">Book for someone I help</h1>
-      <p class="lede">You’re booking as a caregiver or helper. You’ll still see in-plan providers first.</p>
-      <div class="card">
+      <div class="progress" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span></div>
+      <p class="step-crumb">Step 1 of 4 · Who</p>
+      <h1 id="who-title">Who is this visit for?</h1>
+      <p class="lede">Keep this light — you can change it later.</p>
+      <div class="choice-grid" role="group" aria-label="Who the visit is for">
+        <button type="button" class="choice" data-who="me" aria-pressed="true">
+          <span class="choice__radio" aria-hidden="true"></span>
+          <span><strong>Me</strong><span>I’m booking for myself</span></span>
+        </button>
+        <button type="button" class="choice" data-who="someone" aria-pressed="false">
+          <span class="choice__radio" aria-hidden="true"></span>
+          <span><strong>Someone I help</strong><span>A spouse, parent, or person you care for</span></span>
+        </button>
+      </div>
+      <div id="someone-fields" hidden>
         <label class="field" for="care-name">Their name</label>
         <input id="care-name" type="text" autocomplete="name" placeholder="e.g., Robert Chen" />
         <p class="field-help">Used only in this prototype session.</p>
@@ -391,87 +554,98 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
           <option>Friend / neighbor</option>
           <option>Professional caregiver</option>
         </select>
-        <div class="btn-row">
-          <button type="button" class="btn btn--primary" id="someone-continue">Continue to care need</button>
-          <button type="button" class="btn btn--ghost" data-nav="home">Cancel</button>
-        </div>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn--primary btn--block" id="who-continue">Continue</button>
       </div>
     </section>
 
-    <!-- NEED -->
+    <section class="view" id="view-coverage" aria-labelledby="coverage-title">
+      <button type="button" class="back-link" data-nav="who">← Who</button>
+      <div class="progress" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span></span><span></span></div>
+      <p class="step-crumb">Step 2 of 4 · Coverage</p>
+      <h1 id="coverage-title">What coverage should we use?</h1>
+      <p class="lede">This changes what “In your plan” means on results.</p>
+      <div class="choice-grid" role="group" aria-label="Coverage type">
+        <button type="button" class="choice" data-coverage="advantage" aria-pressed="true">
+          <span class="choice__radio" aria-hidden="true"></span>
+          <span><strong>Medicare Advantage</strong><span>Defined network — sample: Humana Gold Plus (HMO)</span></span>
+        </button>
+        <button type="button" class="choice" data-coverage="original" aria-pressed="false">
+          <span class="choice__radio" aria-hidden="true"></span>
+          <span><strong>Original Medicare</strong><span>Doctors who accept Medicare assignment</span></span>
+        </button>
+      </div>
+      <div class="alert" role="note">
+        <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <p><strong>Why we ask</strong>Advantage plans use a network. On Original Medicare, “In your plan” means the doctor accepts Medicare assignment — not a private-plan directory.</p>
+      </div>
+      <div class="btn-row">
+        <button type="button" class="btn btn--primary btn--block" id="coverage-continue">Continue</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-location" aria-labelledby="location-title">
+      <button type="button" class="back-link" data-nav="coverage">← Coverage</button>
+      <div class="progress" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span></span></div>
+      <p class="step-crumb">Step 3 of 4 · Location</p>
+      <h1 id="location-title">Where should we look?</h1>
+      <p class="lede">We’ll use this ZIP for “Near you” (about 15 miles).</p>
+      <label class="field" for="zip-input">ZIP code</label>
+      <input id="zip-input" type="tel" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="e.g., 10001" />
+      <p class="field-help" id="zip-help">5-digit U.S. ZIP. Prototype distances are sample miles near this ZIP.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn--primary btn--block" id="location-continue" disabled>Continue</button>
+      </div>
+    </section>
+
     <section class="view" id="view-need" aria-labelledby="need-title">
-      <button type="button" class="back-link" data-nav="home">← Back to home</button>
-      <p class="step-crumb">Step 1 of 4 · Care need</p>
-      <h1 id="need-title">What’s going on?</h1>
-      <p class="lede">Pick a common reason or type your own. We’ll match a specialty in plain language.</p>
+      <button type="button" class="back-link" data-nav="location">← Location</button>
+      <div class="progress" aria-hidden="true"><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span></div>
+      <p class="step-crumb">Step 4 of 4 · Need</p>
+      <h1 id="need-title">What’s the visit for?</h1>
+      <p class="lede">Pick a reason or search in your own words. Chronic conditions are optional refine — not a separate product.</p>
 
-      <label class="field" for="need-search">Search (optional)</label>
-      <input id="need-search" type="search" placeholder="e.g., knee pain, blood pressure check" autocomplete="off" />
-      <p class="field-help">Or choose a chip below — large targets, no guessing codes.</p>
+      <label class="field" for="need-search">Search</label>
+      <div class="search-wrap">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+        <input id="need-search" type="search" placeholder="e.g., blood pressure, rash, yearly checkup" autocomplete="off" />
+      </div>
+      <ul class="suggest" id="need-suggest" hidden></ul>
 
-      <h2 class="sr-only">Common reasons</h2>
-      <div class="chip-grid" id="condition-chips" role="group" aria-label="Common care needs"></div>
+      <p class="section-kicker">Visit reasons</p>
+      <div class="reason-list" id="condition-chips" role="group" aria-label="Visit reasons"></div>
+      <div id="other-need-wrap" hidden>
+        <label class="field" for="other-need">Tell us in your words</label>
+        <input id="other-need" type="text" maxlength="80" placeholder="e.g., medication review" />
+      </div>
+      <p class="mapped" id="need-mapped" hidden></p>
+      <div id="need-redflag" hidden></div>
 
-      <details>
-        <summary class="btn btn--ghost btn--sm" style="display:inline-flex;margin-bottom:12px">More reasons</summary>
-        <div class="chip-grid" id="more-condition-chips" role="group" aria-label="More care needs"></div>
-      </details>
-
-      <label class="field" for="facility-type">Facility type (optional)</label>
-      <select id="facility-type">
-        <option value="">No preference</option>
-        <option value="pcp">Primary care</option>
-        <option value="specialist">Specialist</option>
-        <option value="urgent">Urgent care</option>
-        <option value="tele">Telehealth only</option>
-      </select>
+      <p class="section-kicker">Also living with (optional refine)</p>
+      <p class="field-help" style="margin-top:0">Chronic conditions help us understand ongoing care. They don’t replace the visit reason above.</p>
+      <div class="chip-grid" id="chronic-chips" role="group" aria-label="Chronic conditions"></div>
 
       <div class="btn-row">
-        <button type="button" class="btn btn--primary" id="need-continue" disabled>Continue</button>
+        <button type="button" class="btn btn--primary btn--block" id="need-continue" disabled>Show providers</button>
       </div>
     </section>
 
-    <!-- SPECIALTY CONFIRM -->
-    <section class="view" id="view-specialty" aria-labelledby="spec-title">
-      <button type="button" class="back-link" data-nav="need">← Change care need</button>
-      <p class="step-crumb">Step 2 of 4 · Specialty</p>
-      <h1 id="spec-title">We’ll look for this specialty</h1>
-      <p class="lede">Confirm before we search so you know who you’re seeing.</p>
-      <div class="card card--info">
-        <p class="muted" style="margin:0 0 4px">You chose</p>
-        <h2 id="spec-condition" style="margin:0"></h2>
-        <p style="margin:12px 0 0"><strong>Suggested specialty:</strong> <span id="spec-label"></span></p>
-        <p class="muted" id="spec-explain"></p>
-      </div>
-      <div class="btn-row">
-        <button type="button" class="btn btn--primary" id="spec-confirm">Show providers</button>
-        <button type="button" class="btn btn--ghost" data-nav="need">Pick a different need</button>
-      </div>
-    </section>
-
-    <!-- RESULTS -->
     <section class="view" id="view-results" aria-labelledby="results-title">
-      <button type="button" class="back-link" data-nav="specialty">← Specialty</button>
-      <p class="step-crumb">Step 3 of 4 · Providers</p>
+      <button type="button" class="back-link" data-nav="need">← Change visit reason</button>
+      <p class="step-crumb">Providers</p>
       <h1 id="results-title">Providers near you</h1>
       <p class="lede" id="results-lede"></p>
+      <div id="results-redflag" hidden></div>
 
       <div class="trust-bar" role="region" aria-label="Search defaults">
-        <p class="trust-bar__title">Showing providers with these defaults on</p>
+        <p class="trust-bar__title">Trust defaults are on — turn off only if you understand the tradeoff</p>
         <div class="trust-chips" id="trust-chips">
           <button type="button" class="chip chip--trust is-locked" data-trust="plan" aria-pressed="true" disabled>In your plan</button>
           <button type="button" class="chip chip--trust is-locked" data-trust="accepting" aria-pressed="true" disabled>Accepting new patients</button>
           <button type="button" class="chip chip--trust is-locked" data-trust="near" aria-pressed="true" disabled>Near you</button>
         </div>
-        <button type="button" class="btn btn--ghost btn--sm more-toggle" id="show-more-options" aria-expanded="false">Show more options</button>
-        <div class="more-options" id="more-options" hidden>
-          <p class="trust-warn is-open" id="trust-warning">
-            Turning off a default may show doctors outside your plan or who aren’t accepting new patients. You could pay more or wait longer.
-          </p>
-          <label><input type="checkbox" id="opt-plan" checked /> Keep “In your plan”</label>
-          <label><input type="checkbox" id="opt-accepting" checked /> Keep “Accepting new patients”</label>
-          <label><input type="checkbox" id="opt-near" checked /> Keep “Near you” (within ~15 miles)</label>
-        </div>
+        <button type="button" class="btn btn--ghost btn--sm" id="show-more-options" aria-expanded="false" style="margin-top:8px">Show more options</button>
       </div>
 
       <div class="results-layout">
@@ -482,25 +656,27 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
         <aside class="summary-panel card" aria-label="Search summary">
           <h2>Your search</h2>
           <p id="side-summary"></p>
-          <div class="map-placeholder" role="img" aria-label="Map placeholder. Addresses and Get directions are available on each provider — this prototype does not rely on a map alone.">
-            Map placeholder<br /><span style="font-weight:600;font-size:14px">Addresses listed on cards · not map-only</span>
+          <div class="map-placeholder" role="img" aria-label="Map placeholder. Addresses are on each card — this prototype is not map-only.">
+            Map placeholder<br /><span style="font-weight:500;font-size:1rem">Addresses on cards · not map-only</span>
           </div>
         </aside>
       </div>
     </section>
 
-    <!-- DOCTOR -->
     <section class="view" id="view-doctor" aria-labelledby="doctor-title">
       <button type="button" class="back-link" data-nav="results">← All providers</button>
-      <p class="step-crumb">Step 4 of 4 · Pick a time</p>
+      <p class="step-crumb">Select appointment</p>
       <div id="doctor-hero"></div>
-      <h2 class="slots-label" style="font-size:1.15rem;margin-top:20px">Live openings — pick a time</h2>
-      <p class="muted" id="doctor-slots-help">Large time chips stay above the fold. Empty days say so plainly.</p>
+      <h2 class="slots-label" style="font-size:1.25rem;margin-top:20px">Select a date and time</h2>
+      <p class="muted" id="doctor-slots-help">New vs existing changes which openings we show. Results were already filtered for accepting when that default is on.</p>
+      <p class="section-kicker">Patient type</p>
+      <div class="segmented" role="group" aria-label="New or existing patient">
+        <button type="button" id="pt-new" aria-pressed="true">I’m a new patient</button>
+        <button type="button" id="pt-existing" aria-pressed="false">I’m an existing patient</button>
+      </div>
       <div id="doctor-days"></div>
       <div class="slots-row" id="doctor-slots" style="margin:12px 0 8px"></div>
-      <p id="new-patient-note" class="card card--success" style="margin-top:16px">
-        <strong>Accepting new patients.</strong> You’re covered to book as a new patient with this clinic in the prototype.
-      </p>
+      <p id="new-patient-note" class="card card--success" style="margin-top:16px"></p>
       <div id="telehealth-note" class="card card--info" hidden>
         <strong>Telehealth only for these openings.</strong> You’ll get a join link the day of the visit. No in-person slots this week.
       </div>
@@ -509,7 +685,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
       </div>
     </section>
 
-    <!-- REVIEW -->
     <section class="view" id="view-review" aria-labelledby="review-title">
       <button type="button" class="back-link" data-nav="doctor">← Change time</button>
       <h1 id="review-title">Review and book</h1>
@@ -523,12 +698,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
       </div>
     </section>
 
-    <!-- SUCCESS -->
     <section class="view" id="view-success" aria-labelledby="success-title">
       <div id="success-body"></div>
     </section>
 
-    <!-- SLOT TAKEN -->
     <section class="view" id="view-slot-taken" aria-labelledby="taken-title">
       <div class="card card--error">
         <h1 id="taken-title">That time was just taken</h1>
@@ -540,7 +713,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
       </div>
     </section>
 
-    <!-- APPOINTMENTS -->
     <section class="view" id="view-appointments" aria-labelledby="appts-title">
       <h1 id="appts-title">My appointments</h1>
       <p class="lede">Upcoming visits stay here and on your home tile — not buried in message center.</p>
@@ -550,124 +722,257 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   </main>
 </div>
 
+<div class="sheet-scrim" id="sheet-scrim" hidden></div>
+<div class="filter-sheet" id="filter-sheet" role="dialog" aria-labelledby="filter-sheet-title" aria-modal="true" hidden>
+  <h2 id="filter-sheet-title">Show more options</h2>
+  <p class="trust-warn is-open">
+    Turning off a default may show doctors outside your plan or who aren’t accepting new patients. You could pay more or wait longer.
+  </p>
+  <label><input type="checkbox" id="opt-plan" checked /> Keep “In your plan”</label>
+  <label><input type="checkbox" id="opt-accepting" checked /> Keep “Accepting new patients”</label>
+  <label><input type="checkbox" id="opt-near" checked /> Keep “Near you” (within ~15 miles)</label>
+  <div class="btn-row">
+    <button type="button" class="btn btn--primary btn--block" id="filter-apply">Apply</button>
+    <button type="button" class="btn btn--ghost btn--block" id="filter-close">Close</button>
+  </div>
+</div>
+
 <footer class="footer">
-  <p><strong>Prototype only.</strong> Not affiliated with live Medicare.gov booking. CMS Design System–inspired colors. No network required.</p>
+  <p><strong>Prototype only.</strong> Not affiliated with live Medicare.gov booking. Medicare Green UI system. No network required (Inter font loads if available).</p>
 </footer>
 
 <script>
 (function () {
   'use strict';
 
-  const CONDITIONS_TOP = [
-    { id: 'bp', label: 'High blood pressure', specialty: 'Primary care', also: 'Cardiology if complex', explain: 'We’ll show primary care first. Cardiologists appear when needed for complex heart care.' },
-    { id: 'heart', label: 'Heart concerns', specialty: 'Cardiology', also: '', explain: 'Heart specialists first. If this is crushing chest pain or stroke symptoms, call 911 — don’t book online.' },
-    { id: 'joint', label: 'Joint or arthritis pain', specialty: 'Orthopedics', also: 'Primary care', explain: 'Orthopedics and primary care for joint, knee, hip, or arthritis pain.' },
-    { id: 'diabetes', label: 'Diabetes / blood sugar', specialty: 'Endocrinology', also: 'Primary care', explain: 'Endocrinology and primary care for diabetes and blood sugar.' },
-    { id: 'skin', label: 'Skin rash or mole check', specialty: 'Dermatology', also: '', explain: 'Dermatology for rashes, hives, and skin checks.' },
-    { id: 'vision', label: 'Vision / eye exam', specialty: 'Ophthalmology', also: '', explain: 'Eye doctors (ophthalmology / optometry) for vision and eye exams.' },
-    { id: 'hearing', label: 'Hearing', specialty: 'Hearing / ENT', also: '', explain: 'Audiology and ENT for hearing concerns.' },
-    { id: 'wellness', label: 'Annual checkup / wellness', specialty: 'Primary care', also: '', explain: 'Primary care for your Medicare annual wellness visit or checkup.' },
-    { id: 'else', label: 'Something else', specialty: 'Primary care', also: '', explain: 'We’ll start with primary care. You can refine with search.' }
+  const VISIT_REASONS = [
+    { id: 'wellness', label: 'Annual wellness visit', specialty: 'Primary care', also: '', explain: 'Primary care for your Medicare annual wellness visit.', synonyms: 'yearly physical checkup medicare wellness awv', redflag: '' },
+    { id: 'bp', label: 'High blood pressure', specialty: 'Primary care', also: 'Cardiology', explain: 'Primary care first. Cardiologists appear when blood pressure care is complex.', synonyms: 'hypertension bp blood pressure', redflag: '' },
+    { id: 'diabetes', label: 'Diabetes checkup', specialty: 'Primary care', also: 'Endocrinology', explain: 'Primary care and endocrinology for diabetes and blood sugar.', synonyms: 'diabetes blood sugar a1c endocrine', redflag: '' },
+    { id: 'heart', label: 'Heart concerns', specialty: 'Cardiology', also: 'Primary care', explain: 'Heart specialists first.', synonyms: 'chest cardiac heart failure palpitations', redflag: 'chest' },
+    { id: 'joint', label: 'Joint or back pain', specialty: 'Orthopedics', also: 'Primary care', explain: 'Orthopedics and primary care for joint, knee, hip, or back pain.', synonyms: 'arthritis knee hip spine sciatica neck', redflag: '' },
+    { id: 'skin', label: 'Skin rash', specialty: 'Dermatology', also: 'Primary care', explain: 'Dermatology for rashes, hives, and skin checks.', synonyms: 'rash mole itch eczema dermatitis', redflag: '' },
+    { id: 'breath', label: 'Breathing problems', specialty: 'Pulmonology', also: 'Primary care', explain: 'Pulmonology and primary care for COPD, wheeze, or shortness of breath.', synonyms: 'copd lung wheeze asthma breathless', redflag: '' },
+    { id: 'mood', label: 'Depression or anxiety', specialty: 'Behavioral health', also: 'Primary care', explain: 'Behavioral health and primary care for mood and anxiety.', synonyms: 'depression anxiety sad mood worry mental', redflag: 'crisis' },
+    { id: 'vision', label: 'Vision', specialty: 'Ophthalmology', also: '', explain: 'Eye doctors for vision and eye exams.', synonyms: 'eye cataract glasses blurry optometry', redflag: '' },
+    { id: 'hearing', label: 'Hearing', specialty: 'Hearing / ENT', also: '', explain: 'Audiology and ENT for hearing concerns.', synonyms: 'hearing aid ear ringing audiology deaf', redflag: '' },
+    { id: 'womens', label: 'Women’s health', specialty: 'Obstetrics & Gynecology', also: 'Primary care', explain: 'OB-GYN and primary care for women’s health.', synonyms: 'gyn pap menopause pelvic', redflag: '' },
+    { id: 'stomach', label: 'Stomach pain', specialty: 'Gastroenterology', also: 'Primary care', explain: 'Gastroenterology and primary care for stomach and digestion.', synonyms: 'belly digestion gerd reflux nausea bowel', redflag: '' },
+    { id: 'fall', label: 'Fall or injury', specialty: 'Primary care', also: 'Orthopedics', explain: 'Primary care and orthopedics for falls and minor injuries.', synonyms: 'fell sprain bruise balance walking', redflag: '' },
+    { id: 'mammo', label: 'Mammogram / breast screening', specialty: 'Breast imaging', also: 'Obstetrics & Gynecology', explain: 'Breast imaging for mammograms and screening.', synonyms: 'mammogram breast screening radiology', redflag: '' },
+    { id: 'else', label: 'Something else', specialty: 'Primary care', also: '', explain: 'We’ll start with primary care. You can type a few words.', synonyms: 'other something else not sure', redflag: '' }
   ];
 
-  const CONDITIONS_MORE = [
-    { id: 'back', label: 'Back or neck pain', specialty: 'Orthopedics', also: 'Primary care', explain: 'Orthopedics or primary care for back and neck pain.' },
-    { id: 'fall', label: 'Fall / balance trouble', specialty: 'Primary care', also: 'Geriatrics', explain: 'Primary care and geriatrics for falls and balance.' },
-    { id: 'breath', label: 'Breathing / lung problems', specialty: 'Pulmonology', also: 'Primary care', explain: 'Pulmonology and primary care for COPD, wheeze, or shortness of breath.' },
-    { id: 'mood', label: 'Feeling down or anxious', specialty: 'Behavioral health', also: 'Primary care', explain: 'Behavioral health and primary care for mood and anxiety.' },
-    { id: 'memory', label: 'Memory or thinking changes', specialty: 'Neurology', also: 'Primary care', explain: 'Neurology, geriatrics, or primary care for memory concerns.' },
-    { id: 'stomach', label: 'Stomach or digestion', specialty: 'Gastroenterology', also: 'Primary care', explain: 'Gastroenterology for stomach and digestion problems.' },
-    { id: 'cold', label: 'Cold, flu, sinus, UTI', specialty: 'Urgent care', also: 'Primary care', explain: 'Urgent care or primary care for same-day illness.' },
-    { id: 'injury', label: 'Minor injury', specialty: 'Urgent care', also: 'Orthopedics', explain: 'Urgent care for sprains and minor injuries.' },
-    { id: 'womens', label: "Women’s health", specialty: 'Obstetrics & Gynecology', also: 'Primary care', explain: 'OB-GYN and primary care for women’s health.' },
-    { id: 'bladder', label: 'Bladder or prostate', specialty: 'Urology', also: '', explain: 'Urology for bladder and prostate concerns.' },
-    { id: 'kidney', label: 'Kidney concerns', specialty: 'Primary care', also: 'Nephrology', explain: 'Primary care and nephrology for kidney concerns.' },
-    { id: 'cholesterol', label: 'High cholesterol', specialty: 'Primary care', also: '', explain: 'Primary care for cholesterol and lipid checks.' },
-    { id: 'newpcp', label: 'New primary doctor', specialty: 'Primary care', also: '', explain: 'Primary care doctors accepting new patients.' }
+  const CHRONIC = [
+    { id: 'c-diabetes', label: 'Diabetes' },
+    { id: 'c-bp', label: 'High blood pressure' },
+    { id: 'c-heart', label: 'Heart disease' },
+    { id: 'c-copd', label: 'COPD / lung disease' },
+    { id: 'c-arthritis', label: 'Arthritis' },
+    { id: 'c-depression', label: 'Depression' }
   ];
+
+  function days(rows) {
+    return rows.map(function (r) {
+      return { key: r[0], label: r[1], date: r[2], newSlots: r[3], existingSlots: r[4] };
+    });
+  }
 
   const PROVIDERS = [
     {
       id: 'rivera', name: 'Dr. Elena Rivera', initials: 'ER', specialty: 'Primary care',
       plain: 'Primary care doctor', miles: 1.8, rating: 4.8, reviews: 214,
       address: '1200 Market St, Suite 200', city: 'Your city',
-      tele: false, accepting: true, inNetwork: true,
-      days: [
-        { key: 'thu', label: 'Thu', date: 'Sep 10', slots: ['9:00 AM', '10:30 AM', '2:00 PM'] },
-        { key: 'fri', label: 'Fri', date: 'Sep 11', slots: ['11:00 AM', '3:30 PM'] },
-        { key: 'mon', label: 'Mon', date: 'Sep 14', slots: ['9:30 AM', '1:00 PM', '4:00 PM'] },
-        { key: 'tue', label: 'Tue', date: 'Sep 15', slots: [] }
-      ]
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['10:30 AM', '2:00 PM'], ['9:00 AM', '10:30 AM', '2:00 PM']],
+        ['fri', 'Fri', 'Sep 11', ['11:00 AM'], ['11:00 AM', '3:30 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:30 AM', '4:00 PM'], ['9:30 AM', '1:00 PM', '4:00 PM']],
+        ['tue', 'Tue', 'Sep 15', [], []]
+      ])
     },
     {
       id: 'okonkwo', name: 'Dr. Chinedu Okonkwo', initials: 'CO', specialty: 'Cardiology',
       plain: 'Heart doctor', miles: 3.2, rating: 4.9, reviews: 162,
       address: '88 Cardiac Way', city: 'Your city',
-      tele: false, accepting: true, inNetwork: true,
-      days: [
-        { key: 'fri', label: 'Fri', date: 'Sep 11', slots: ['8:30 AM', '1:15 PM'] },
-        { key: 'mon', label: 'Mon', date: 'Sep 14', slots: ['10:00 AM', '2:45 PM', '3:30 PM'] },
-        { key: 'wed', label: 'Wed', date: 'Sep 16', slots: ['9:00 AM'] },
-        { key: 'thu', label: 'Thu', date: 'Sep 17', slots: ['11:30 AM', '4:15 PM'] }
-      ]
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['fri', 'Fri', 'Sep 11', ['1:15 PM'], ['8:30 AM', '1:15 PM']],
+        ['mon', 'Mon', 'Sep 14', ['10:00 AM', '3:30 PM'], ['10:00 AM', '2:45 PM', '3:30 PM']],
+        ['wed', 'Wed', 'Sep 16', ['9:00 AM'], ['9:00 AM']],
+        ['thu', 'Thu', 'Sep 17', ['4:15 PM'], ['11:30 AM', '4:15 PM']]
+      ])
     },
     {
       id: 'park', name: 'Dr. Min-Jun Park', initials: 'MP', specialty: 'Orthopedics',
       plain: 'Bone & joint doctor', miles: 4.5, rating: 4.7, reviews: 98,
       address: '450 Ortho Plaza', city: 'Your city',
-      tele: false, accepting: true, inNetwork: true,
-      days: [
-        { key: 'thu', label: 'Thu', date: 'Sep 10', slots: ['2:30 PM'] },
-        { key: 'sat', label: 'Sat', date: 'Sep 12', slots: ['9:00 AM', '10:00 AM'] },
-        { key: 'tue', label: 'Tue', date: 'Sep 15', slots: ['8:00 AM', '12:00 PM', '3:00 PM'] },
-        { key: 'wed', label: 'Wed', date: 'Sep 16', slots: [] }
-      ]
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['2:30 PM'], ['2:30 PM']],
+        ['sat', 'Sat', 'Sep 12', ['9:00 AM'], ['9:00 AM', '10:00 AM']],
+        ['tue', 'Tue', 'Sep 15', ['8:00 AM', '3:00 PM'], ['8:00 AM', '12:00 PM', '3:00 PM']],
+        ['wed', 'Wed', 'Sep 16', [], []]
+      ])
     },
     {
       id: 'nguyen', name: 'Dr. Linh Nguyen', initials: 'LN', specialty: 'Dermatology',
       plain: 'Skin doctor', miles: 2.1, rating: 4.6, reviews: 187,
       address: '17 Wellness Ave', city: 'Your city',
-      tele: true, accepting: true, inNetwork: true,
-      days: [
-        { key: 'fri', label: 'Fri', date: 'Sep 11', slots: ['12:00 PM', '12:30 PM', '1:00 PM'] },
-        { key: 'mon', label: 'Mon', date: 'Sep 14', slots: ['9:00 AM', '9:30 AM'] },
-        { key: 'tue', label: 'Tue', date: 'Sep 15', slots: ['4:00 PM', '4:30 PM'] },
-        { key: 'wed', label: 'Wed', date: 'Sep 16', slots: ['10:15 AM'] }
-      ]
+      tele: true, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['fri', 'Fri', 'Sep 11', ['12:00 PM', '1:00 PM'], ['12:00 PM', '12:30 PM', '1:00 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:00 AM'], ['9:00 AM', '9:30 AM']],
+        ['tue', 'Tue', 'Sep 15', ['4:00 PM'], ['4:00 PM', '4:30 PM']],
+        ['wed', 'Wed', 'Sep 16', ['10:15 AM'], ['10:15 AM']]
+      ])
     },
     {
       id: 'hassan', name: 'Dr. Amira Hassan', initials: 'AH', specialty: 'Ophthalmology',
       plain: 'Eye doctor', miles: 5.0, rating: 4.8, reviews: 121,
       address: '900 Vision Center', city: 'Your city',
-      tele: false, accepting: true, inNetwork: true,
-      days: [
-        { key: 'thu', label: 'Thu', date: 'Sep 10', slots: ['8:00 AM', '11:00 AM'] },
-        { key: 'fri', label: 'Fri', date: 'Sep 11', slots: [] },
-        { key: 'mon', label: 'Mon', date: 'Sep 14', slots: ['1:30 PM', '3:00 PM'] },
-        { key: 'tue', label: 'Tue', date: 'Sep 15', slots: ['10:00 AM'] }
-      ]
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['8:00 AM'], ['8:00 AM', '11:00 AM']],
+        ['fri', 'Fri', 'Sep 11', [], []],
+        ['mon', 'Mon', 'Sep 14', ['1:30 PM'], ['1:30 PM', '3:00 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:00 AM'], ['10:00 AM']]
+      ])
     },
     {
       id: 'brooks', name: 'Dr. Samuel Brooks', initials: 'SB', specialty: 'Hearing / ENT',
       plain: 'Hearing & ear doctor', miles: 6.1, rating: 4.5, reviews: 76,
       address: '33 Ear & Hearing Ln', city: 'Your city',
-      tele: false, accepting: true, inNetwork: true,
-      days: [
-        { key: 'wed', label: 'Wed', date: 'Sep 16', slots: ['9:45 AM', '2:00 PM'] },
-        { key: 'thu', label: 'Thu', date: 'Sep 17', slots: ['11:00 AM', '1:00 PM', '3:15 PM'] },
-        { key: 'fri', label: 'Fri', date: 'Sep 18', slots: ['8:30 AM'] },
-        { key: 'mon', label: 'Mon', date: 'Sep 21', slots: [] }
-      ]
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['wed', 'Wed', 'Sep 16', ['9:45 AM'], ['9:45 AM', '2:00 PM']],
+        ['thu', 'Thu', 'Sep 17', ['11:00 AM', '3:15 PM'], ['11:00 AM', '1:00 PM', '3:15 PM']],
+        ['fri', 'Fri', 'Sep 18', ['8:30 AM'], ['8:30 AM']],
+        ['mon', 'Mon', 'Sep 21', [], []]
+      ])
+    },
+    {
+      id: 'cole', name: 'Dr. Jordan Cole', initials: 'JC', specialty: 'Behavioral health',
+      plain: 'Counselor / therapist', miles: 2.8, rating: 4.7, reviews: 88,
+      address: '41 Care Circle', city: 'Your city',
+      tele: true, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['1:00 PM'], ['10:00 AM', '1:00 PM']],
+        ['fri', 'Fri', 'Sep 11', ['3:00 PM'], ['3:00 PM', '4:00 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:00 AM', '11:00 AM'], ['9:00 AM', '11:00 AM', '2:00 PM']],
+        ['wed', 'Wed', 'Sep 16', [], ['1:30 PM']]
+      ])
+    },
+    {
+      id: 'patel', name: 'Dr. Anika Patel', initials: 'AP', specialty: 'Pulmonology',
+      plain: 'Lung doctor', miles: 7.2, rating: 4.4, reviews: 64,
+      address: '210 Breathwell Pkwy', city: 'Your city',
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['fri', 'Fri', 'Sep 11', ['8:45 AM'], ['8:45 AM', '2:15 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:00 AM'], ['10:00 AM', '1:00 PM']],
+        ['wed', 'Wed', 'Sep 16', ['3:30 PM'], ['3:30 PM']],
+        ['thu', 'Thu', 'Sep 17', [], []]
+      ])
+    },
+    {
+      id: 'alvarez', name: 'Dr. Sofia Alvarez', initials: 'SA', specialty: 'Obstetrics & Gynecology',
+      plain: 'Women’s health doctor', miles: 3.9, rating: 4.9, reviews: 203,
+      address: '55 Women’s Health Blvd', city: 'Your city',
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['9:15 AM'], ['9:15 AM', '11:45 AM']],
+        ['mon', 'Mon', 'Sep 14', ['2:00 PM'], ['8:30 AM', '2:00 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:30 AM'], ['10:30 AM']],
+        ['fri', 'Fri', 'Sep 18', [], ['1:00 PM']]
+      ])
+    },
+    {
+      id: 'kim', name: 'Dr. David Kim', initials: 'DK', specialty: 'Gastroenterology',
+      plain: 'Stomach & digestion doctor', miles: 4.1, rating: null, reviews: 0,
+      address: '18 Digestive Ctr', city: 'Your city',
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['mon', 'Mon', 'Sep 14', ['8:00 AM'], ['8:00 AM', '10:00 AM']],
+        ['wed', 'Wed', 'Sep 16', ['1:45 PM'], ['1:45 PM', '3:15 PM']],
+        ['thu', 'Thu', 'Sep 17', ['9:00 AM'], ['9:00 AM']],
+        ['fri', 'Fri', 'Sep 18', [], []]
+      ])
+    },
+    {
+      id: 'chen', name: 'Dr. Priya Chen', initials: 'PC', specialty: 'Breast imaging',
+      plain: 'Breast imaging · mammogram', miles: 3.0, rating: 4.5, reviews: 54,
+      address: '72 Screening Way', city: 'Your city',
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['fri', 'Fri', 'Sep 11', ['7:30 AM', '8:00 AM'], ['7:30 AM', '8:00 AM', '8:30 AM']],
+        ['mon', 'Mon', 'Sep 14', ['7:45 AM'], ['7:45 AM', '9:00 AM']],
+        ['wed', 'Wed', 'Sep 16', ['10:00 AM'], ['10:00 AM']],
+        ['thu', 'Thu', 'Sep 17', [], []]
+      ])
+    },
+    {
+      id: 'washington', name: 'Dr. Maya Washington', initials: 'MW', specialty: 'Primary care',
+      plain: 'Primary care doctor', miles: 2.4, rating: 4.3, reviews: 41,
+      address: '9 Assignment Ave', city: 'Your city',
+      tele: false, accepting: true, inNetwork: false, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['1:00 PM'], ['1:00 PM', '2:30 PM']],
+        ['tue', 'Tue', 'Sep 15', ['9:00 AM'], ['9:00 AM', '11:00 AM']],
+        ['wed', 'Wed', 'Sep 16', ['4:00 PM'], ['4:00 PM']],
+        ['fri', 'Fri', 'Sep 18', [], []]
+      ])
+    },
+    {
+      id: 'singh', name: 'Dr. Raj Singh', initials: 'RS', specialty: 'Cardiology',
+      plain: 'Heart doctor', miles: 1.5, rating: 4.6, reviews: 110,
+      address: '4 Established Heart Pl', city: 'Your city',
+      tele: false, accepting: false, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', [], ['8:00 AM', '9:30 AM']],
+        ['fri', 'Fri', 'Sep 11', [], ['2:00 PM']],
+        ['mon', 'Mon', 'Sep 14', [], ['10:15 AM', '3:00 PM']],
+        ['tue', 'Tue', 'Sep 15', [], []]
+      ])
+    },
+    {
+      id: 'rossi', name: 'Dr. Luca Rossi', initials: 'LR', specialty: 'Orthopedics',
+      plain: 'Bone & joint doctor', miles: 22.0, rating: 4.8, reviews: 73,
+      address: '800 Farther Ridge', city: 'Next county',
+      tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['sat', 'Sat', 'Sep 12', ['8:00 AM'], ['8:00 AM', '9:00 AM']],
+        ['mon', 'Mon', 'Sep 14', ['1:00 PM'], ['1:00 PM']],
+        ['wed', 'Wed', 'Sep 16', ['11:00 AM'], ['11:00 AM', '2:00 PM']],
+        ['thu', 'Thu', 'Sep 17', [], []]
+      ])
+    },
+    {
+      id: 'hale', name: 'Dr. Owen Hale', initials: 'OH', specialty: 'Primary care',
+      plain: 'Primary care doctor', miles: 3.1, rating: 3.9, reviews: 19,
+      address: '301 Cash-pay Clinic', city: 'Your city',
+      tele: false, accepting: true, inNetwork: false, acceptsAssignment: false,
+      days: days([
+        ['fri', 'Fri', 'Sep 11', ['3:00 PM'], ['3:00 PM', '4:00 PM']],
+        ['mon', 'Mon', 'Sep 14', ['8:15 AM'], ['8:15 AM']],
+        ['tue', 'Tue', 'Sep 15', [], ['12:00 PM']],
+        ['wed', 'Wed', 'Sep 16', [], []]
+      ])
     }
   ];
 
   const state = {
+    who: 'me',
     forSomeone: null,
+    coverage: 'advantage',
+    zip: '',
     condition: null,
-    facility: '',
+    chronic: [],
+    otherNeed: '',
     providerId: null,
     dayKey: null,
     slot: null,
+    patientType: 'new',
     note: '',
     appointment: null,
     forceEmpty: false,
@@ -682,77 +987,99 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
     if (saved) state.appointment = JSON.parse(saved);
   } catch (e) {}
 
-  const $ = (sel, root) => (root || document).querySelector(sel);
-  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const $ = function (sel, root) { return (root || document).querySelector(sel); };
+  const $$ = function (sel, root) { return Array.from((root || document).querySelectorAll(sel)); };
 
   function announce(msg) {
     const el = $('#aria-live');
     el.textContent = '';
-    setTimeout(() => { el.textContent = msg; }, 50);
-  }
-
-  function allConditions() {
-    return CONDITIONS_TOP.concat(CONDITIONS_MORE);
+    setTimeout(function () { el.textContent = msg; }, 50);
   }
 
   function findCondition(id) {
-    return allConditions().find(c => c.id === id);
+    return VISIT_REASONS.find(function (c) { return c.id === id; });
   }
 
   function getProvider(id) {
-    return PROVIDERS.find(p => p.id === id);
+    return PROVIDERS.find(function (p) { return p.id === id; });
+  }
+
+  function inPlan(p) {
+    return state.coverage === 'advantage' ? p.inNetwork : p.acceptsAssignment;
+  }
+
+  function planBadgeLabel(p) {
+    if (state.coverage === 'original') {
+      return inPlan(p) ? 'Accepts Medicare assignment' : 'Does not accept assignment';
+    }
+    return inPlan(p) ? 'In your plan' : 'Out of plan';
+  }
+
+  function coverageLabel() {
+    return state.coverage === 'original'
+      ? 'Original Medicare (assignment)'
+      : 'Medicare Advantage — Humana Gold Plus (HMO)';
+  }
+
+  function daySlots(day) {
+    if (!day) return [];
+    return state.patientType === 'existing' ? day.existingSlots : day.newSlots;
   }
 
   function specialtyMatch(p, specialty) {
     if (!specialty) return true;
     const s = specialty.toLowerCase();
-    const ps = (p.specialty + ' ' + p.plain).toLowerCase();
-    if (s.includes('primary')) return p.specialty === 'Primary care';
-    if (s.includes('cardio') || s.includes('heart')) return p.specialty === 'Cardiology' || p.specialty === 'Primary care';
-    if (s.includes('ortho')) return p.specialty === 'Orthopedics' || p.specialty === 'Primary care';
-    if (s.includes('derm')) return p.specialty === 'Dermatology';
-    if (s.includes('ophthal') || s.includes('eye')) return p.specialty === 'Ophthalmology';
-    if (s.includes('hearing') || s.includes('ent')) return p.specialty === 'Hearing / ENT';
-    if (s.includes('endo')) return p.specialty === 'Primary care' || p.specialty === 'Cardiology';
-    if (s.includes('urgent')) return true;
-    if (s.includes('behavioral') || s.includes('neuro') || s.includes('pulm') || s.includes('gastro') || s.includes('uro') || s.includes('ob')) {
-      return p.specialty === 'Primary care' || ps.includes(s.slice(0, 4));
-    }
-    return true;
+    if (s.indexOf('primary') !== -1) return p.specialty === 'Primary care';
+    if (s.indexOf('cardio') !== -1) return p.specialty === 'Cardiology' || p.specialty === 'Primary care';
+    if (s.indexOf('ortho') !== -1) return p.specialty === 'Orthopedics' || p.specialty === 'Primary care';
+    if (s.indexOf('derm') !== -1) return p.specialty === 'Dermatology';
+    if (s.indexOf('ophthal') !== -1) return p.specialty === 'Ophthalmology';
+    if (s.indexOf('hearing') !== -1 || s.indexOf('ent') !== -1) return p.specialty === 'Hearing / ENT';
+    if (s.indexOf('pulm') !== -1) return p.specialty === 'Pulmonology' || p.specialty === 'Primary care';
+    if (s.indexOf('behavioral') !== -1) return p.specialty === 'Behavioral health' || p.specialty === 'Primary care';
+    if (s.indexOf('obstetric') !== -1 || s.indexOf('gyne') !== -1) return p.specialty === 'Obstetrics & Gynecology' || p.specialty === 'Primary care';
+    if (s.indexOf('gastro') !== -1) return p.specialty === 'Gastroenterology' || p.specialty === 'Primary care';
+    if (s.indexOf('breast') !== -1 || s.indexOf('imaging') !== -1) return p.specialty === 'Breast imaging' || p.specialty === 'Obstetrics & Gynecology';
+    if (s.indexOf('endo') !== -1) return p.specialty === 'Primary care';
+    return p.specialty === specialty || p.specialty === 'Primary care';
   }
 
   function filteredProviders() {
     if (state.forceEmpty) return [];
-    let list = PROVIDERS.slice();
-    if (state.trust.plan) list = list.filter(p => p.inNetwork);
-    if (state.trust.accepting) list = list.filter(p => p.accepting);
-    if (state.trust.near) list = list.filter(p => p.miles <= 15);
-    if (state.forceTele || state.facility === 'tele') list = list.filter(p => p.tele);
-    if (state.condition) list = list.filter(p => specialtyMatch(p, state.condition.specialty));
-    // Always show at least primary-care-ish options for wellness/else if empty after specialty filter — but keep honest empty when forceEmpty
-    if (!list.length && state.condition && !state.forceEmpty && !state.forceTele && state.facility !== 'tele') {
-      list = PROVIDERS.filter(p => p.inNetwork && p.accepting && (p.specialty === 'Primary care' || specialtyMatch(p, state.condition.specialty)));
+    var list = PROVIDERS.slice();
+    if (state.trust.plan) list = list.filter(inPlan);
+    if (state.trust.accepting) list = list.filter(function (p) { return p.accepting; });
+    if (state.trust.near) list = list.filter(function (p) { return p.miles <= 15; });
+    if (state.forceTele) list = list.filter(function (p) { return p.tele; });
+    if (state.condition) list = list.filter(function (p) { return specialtyMatch(p, state.condition.specialty); });
+    if (!list.length && state.condition && !state.forceEmpty && !state.forceTele) {
+      list = PROVIDERS.filter(function (p) {
+        return inPlan(p) && p.accepting && (p.specialty === 'Primary care' || specialtyMatch(p, state.condition.specialty));
+      });
+      if (state.trust.near) list = list.filter(function (p) { return p.miles <= 15; });
     }
     return list;
   }
 
   function showView(name) {
-    $$('.view').forEach(v => v.classList.remove('is-active'));
-    const view = $('#view-' + name);
+    $$('.view').forEach(function (v) { v.classList.remove('is-active'); });
+    var view = $('#view-' + name);
     if (!view) return;
     view.classList.add('is-active');
-    $$('.app-nav button').forEach(b => {
-      const nav = b.getAttribute('data-nav');
-      const current = (name === 'home' && nav === 'home') ||
+    $$('.app-nav button').forEach(function (b) {
+      var nav = b.getAttribute('data-nav');
+      var booking = ['who', 'coverage', 'location', 'need', 'results', 'doctor', 'review', 'success'].indexOf(name) !== -1;
+      var current = (name === 'home' && nav === 'home') ||
         (name === 'appointments' && nav === 'appointments') ||
-        (['need','specialty','results','doctor','review','success'].includes(name) && nav === 'need');
+        (booking && nav === 'who');
       if (current) b.setAttribute('aria-current', 'page');
       else b.removeAttribute('aria-current');
     });
-    const titles = {
-      home: 'Home', someone: 'Book for someone', need: 'Care need', specialty: 'Confirm specialty',
-      results: 'Provider results', doctor: 'Pick a time', review: 'Review appointment',
-      success: 'Booking confirmation', 'slot-taken': 'Time unavailable', appointments: 'My appointments'
+    var titles = {
+      home: 'Home', who: 'Who is the visit for', coverage: 'Coverage', location: 'Location',
+      need: 'Visit reason', results: 'Provider results', doctor: 'Select appointment',
+      review: 'Review appointment', success: 'Booking confirmation',
+      'slot-taken': 'Time unavailable', appointments: 'My appointments'
     };
     announce((titles[name] || name) + ' screen');
     window.scrollTo(0, 0);
@@ -762,8 +1089,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 
   function render(name) {
     if (name === 'home') renderHome();
+    if (name === 'who') renderWho();
+    if (name === 'coverage') renderCoverage();
+    if (name === 'location') renderLocation();
     if (name === 'need') renderNeed();
-    if (name === 'specialty') renderSpecialty();
     if (name === 'results') renderResults();
     if (name === 'doctor') renderDoctor();
     if (name === 'review') renderReview();
@@ -772,174 +1101,266 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   }
 
   function renderHome() {
-    const box = $('#home-upcoming');
+    var hour = new Date().getHours();
+    var greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+    $('#home-greeting').textContent = greet + ', Diana';
+    $('#home-plan-note').innerHTML = state.coverage === 'original'
+      ? '<strong>Your coverage (sample):</strong> Original Medicare. “In your plan” means the doctor accepts Medicare assignment.'
+      : '<strong>Your coverage (sample):</strong> Medicare Advantage — Humana Gold Plus (HMO). “In your plan” means this prototype’s mock Advantage network.';
+    var box = $('#home-upcoming');
     if (state.appointment) {
-      const a = state.appointment;
+      var a = state.appointment;
       box.hidden = false;
-      box.innerHTML = `
-        <div class="card card--success appt-tile">
-          <p class="muted" style="margin:0;font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:.03em">Upcoming visit</p>
-          <p class="appt-when">${escapeHtml(a.whenLabel)}</p>
-          <p style="margin:0"><strong>${escapeHtml(a.providerName)}</strong> · ${escapeHtml(a.specialty)}</p>
-          <p class="muted" style="margin:4px 0 0">${escapeHtml(a.address)} · ${escapeHtml(String(a.miles))} mi
-            ${a.tele ? ' · <strong>Video visit</strong>' : ''}
-            ${a.pendingConfirm ? ' · <strong>Clinic will call to confirm</strong>' : ''}</p>
-          <div class="appt-actions">
-            <button type="button" class="btn btn--secondary btn--sm" data-action="directions">Get directions</button>
-            <button type="button" class="btn btn--ghost btn--sm" data-nav="appointments">Details</button>
-            <button type="button" class="btn btn--ghost btn--sm" disabled title="Coming next">Reschedule · Next</button>
-          </div>
-        </div>`;
+      box.innerHTML =
+        '<div class="card card--success appt-tile">' +
+          '<p class="muted" style="margin:0;font-weight:600;text-transform:uppercase;font-size:1rem;letter-spacing:.03em">Upcoming visit</p>' +
+          '<p class="appt-when">' + escapeHtml(a.whenLabel) + '</p>' +
+          '<p style="margin:0"><strong>' + escapeHtml(a.providerName) + '</strong> · ' + escapeHtml(a.specialty) + '</p>' +
+          '<p class="muted" style="margin:4px 0 0">' + escapeHtml(a.address) + ' · ' + escapeHtml(String(a.miles)) + ' mi' +
+            (a.tele ? ' · <strong>Video visit</strong>' : '') +
+            (a.pendingConfirm ? ' · <strong>Clinic will call to confirm</strong>' : '') + '</p>' +
+          '<div class="appt-actions">' +
+            '<button type="button" class="btn btn--secondary btn--sm" data-action="directions">Get directions</button>' +
+            '<button type="button" class="btn btn--ghost btn--sm" data-nav="appointments">Details</button>' +
+            '<button type="button" class="btn btn--ghost btn--sm" disabled title="Coming next">Reschedule · Next</button>' +
+          '</div>' +
+        '</div>';
     } else {
       box.hidden = true;
       box.innerHTML = '';
     }
   }
 
-  function renderNeed() {
-    const top = $('#condition-chips');
-    top.innerHTML = CONDITIONS_TOP.map(c => `
-      <button type="button" class="chip" role="button" aria-pressed="${state.condition && state.condition.id === c.id}" data-cond="${c.id}">${escapeHtml(c.label)}</button>
-    `).join('');
-    const more = $('#more-condition-chips');
-    more.innerHTML = CONDITIONS_MORE.map(c => `
-      <button type="button" class="chip" aria-pressed="${state.condition && state.condition.id === c.id}" data-cond="${c.id}">${escapeHtml(c.label)}</button>
-    `).join('');
-    $('#need-continue').disabled = !state.condition;
-    $('#facility-type').value = state.facility || '';
+  function renderWho() {
+    $$('[data-who]').forEach(function (btn) {
+      var on = btn.getAttribute('data-who') === state.who;
+      btn.classList.toggle('is-selected', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var fields = $('#someone-fields');
+    fields.hidden = state.who !== 'someone';
   }
 
-  function renderSpecialty() {
-    if (!state.condition) { showView('need'); return; }
-    $('#spec-condition').textContent = state.condition.label;
-    $('#spec-label').textContent = state.condition.specialty + (state.condition.also ? ' · also ' + state.condition.also : '');
-    $('#spec-explain').textContent = state.condition.explain;
+  function renderCoverage() {
+    $$('[data-coverage]').forEach(function (btn) {
+      var on = btn.getAttribute('data-coverage') === state.coverage;
+      btn.classList.toggle('is-selected', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  function renderLocation() {
+    $('#zip-input').value = state.zip;
+    $('#location-continue').disabled = !/^\d{5}$/.test(state.zip);
+  }
+
+  function renderNeed() {
+    $('#condition-chips').innerHTML = VISIT_REASONS.map(function (c) {
+      var on = state.condition && state.condition.id === c.id;
+      return '<button type="button" class="reason' + (on ? ' is-selected' : '') + '" aria-pressed="' + (on ? 'true' : 'false') + '" data-cond="' + c.id + '">' + escapeHtml(c.label) + '</button>';
+    }).join('');
+    $('#chronic-chips').innerHTML = CHRONIC.map(function (c) {
+      var on = state.chronic.indexOf(c.id) !== -1;
+      return '<button type="button" class="chip chip--chronic" aria-pressed="' + (on ? 'true' : 'false') + '" data-chronic="' + c.id + '">' + escapeHtml(c.label) + '</button>';
+    }).join('');
+    $('#need-continue').disabled = !state.condition;
+    $('#other-need-wrap').hidden = !(state.condition && state.condition.id === 'else');
+    $('#other-need').value = state.otherNeed;
+    var mapped = $('#need-mapped');
+    if (state.condition) {
+      mapped.hidden = false;
+      mapped.innerHTML = '<strong>We’ll look for:</strong> ' + escapeHtml(state.condition.specialty) +
+        (state.condition.also ? ' · also ' + escapeHtml(state.condition.also) : '') +
+        '<br /><span class="muted">' + escapeHtml(state.condition.explain) + '</span>';
+    } else {
+      mapped.hidden = true;
+    }
+    renderRedflag('#need-redflag');
+  }
+
+  function renderRedflag(sel) {
+    var el = $(sel);
+    if (!state.condition || !state.condition.redflag) {
+      el.hidden = true;
+      el.innerHTML = '';
+      return;
+    }
+    el.hidden = false;
+    if (state.condition.redflag === 'chest') {
+      el.innerHTML = '<div class="alert alert--error" role="alert"><svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><p><strong>If this is an emergency, call 911</strong>Crushing chest pain, trouble speaking, or signs of stroke are not for online booking.</p></div>';
+    } else {
+      el.innerHTML = '<div class="alert alert--warn" role="note"><svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l9 16H3L12 3z"/><path d="M12 10v4M12 18h.01"/></svg><p><strong>Need crisis help now?</strong> Call or text 988. You can still book a regular visit below when you are safe.</p></div>';
+    }
   }
 
   function renderResults() {
-    const list = filteredProviders();
-    const lede = $('#results-lede');
-    const cond = state.condition ? state.condition.label : 'your care need';
-    const spec = state.condition ? state.condition.specialty : 'care';
-    lede.textContent = `For “${cond}” → ${spec}. Tap a time on a card to jump ahead, or open a doctor for more openings.`;
-    $('#side-summary').innerHTML = `<strong>${escapeHtml(cond)}</strong><br/>Specialty: ${escapeHtml(spec)}<br/>Defaults: in your plan, accepting, near you`;
+    var list = filteredProviders();
+    var cond = state.condition ? state.condition.label : 'your care need';
+    if (state.condition && state.condition.id === 'else' && state.otherNeed) cond = state.otherNeed;
+    var spec = state.condition ? state.condition.specialty : 'care';
+    var chronicTxt = state.chronic.length
+      ? ' Also living with: ' + state.chronic.map(function (id) {
+          var c = CHRONIC.find(function (x) { return x.id === id; });
+          return c ? c.label : id;
+        }).join(', ') + '.'
+      : '';
+    $('#results-lede').textContent = 'For “' + cond + '” → ' + spec + '. ZIP ' + (state.zip || '—') + '.' + chronicTxt + ' Ratings are on cards only — not a filter.';
+    $('#side-summary').innerHTML = '<strong>' + escapeHtml(cond) + '</strong><br/>Specialty: ' + escapeHtml(spec) +
+      '<br/>Coverage: ' + escapeHtml(coverageLabel()) +
+      '<br/>ZIP: ' + escapeHtml(state.zip || '—') +
+      '<br/>Defaults: in your plan, accepting, near you';
+    renderRedflag('#results-redflag');
 
-    // sync trust chip visuals
-    $$('#trust-chips .chip').forEach(chip => {
-      const key = chip.getAttribute('data-trust');
-      const on = state.trust[key];
+    $$('#trust-chips .chip').forEach(function (chip) {
+      var key = chip.getAttribute('data-trust');
+      var on = state.trust[key];
       chip.classList.toggle('is-locked', on);
+      chip.classList.toggle('is-off', !on);
       chip.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    $('#opt-plan').checked = state.trust.plan;
+    $('#opt-accepting').checked = state.trust.accepting;
+    $('#opt-near').checked = state.trust.near;
 
-    const empty = $('#results-empty');
-    const resultsList = $('#results-list');
+    var empty = $('#results-empty');
+    var resultsList = $('#results-list');
     if (!list.length) {
       resultsList.innerHTML = '';
       empty.hidden = false;
-      empty.innerHTML = `
-        <div class="card card--warn empty-state">
-          <h2>No providers match these defaults</h2>
-          <p>We couldn’t find anyone who is <strong>in your plan</strong> and <strong>accepting new patients</strong>${state.forceTele || state.facility === 'tele' ? ' for <strong>telehealth only</strong>' : ''} near you for this specialty.</p>
-          <p class="muted">You can widen options (with a cost/wait warning) or change the care need. We won’t hide this empty state behind a spinner.</p>
-          <div class="btn-row">
-            <button type="button" class="btn btn--primary" id="empty-widen">Show more options</button>
-            <button type="button" class="btn btn--ghost" data-nav="need">Change care need</button>
-          </div>
-        </div>`;
-      const widen = $('#empty-widen');
-      if (widen) widen.addEventListener('click', () => {
+      empty.innerHTML =
+        '<div class="card card--warn empty-state">' +
+          '<h2>No providers match these defaults</h2>' +
+          '<p>We couldn’t find anyone who is <strong>in your plan</strong> and <strong>accepting new patients</strong>' +
+            (state.forceTele ? ' for <strong>telehealth only</strong>' : '') +
+            ' near you for this specialty.</p>' +
+          '<p class="muted">You can widen options (with a cost/wait warning) or change the visit reason. We won’t hide this empty state.</p>' +
+          '<div class="btn-row">' +
+            '<button type="button" class="btn btn--primary" id="empty-widen">Show more options</button>' +
+            '<button type="button" class="btn btn--ghost" data-nav="need">Change visit reason</button>' +
+          '</div>' +
+        '</div>';
+      var widen = $('#empty-widen');
+      if (widen) widen.addEventListener('click', function () {
         state.forceEmpty = false;
-        $('#show-more-options').click();
-        renderResults();
+        openFilterSheet();
       });
       return;
     }
     empty.hidden = true;
     empty.innerHTML = '';
-    resultsList.innerHTML = list.map(p => providerCardHtml(p)).join('');
+    resultsList.innerHTML = list.map(providerCardHtml).join('');
   }
 
   function providerCardHtml(p) {
-    const dayChips = p.days.map(d => {
-      const n = d.slots.length;
+    var slots = p.days.map(function (d) {
+      var n = daySlots(d).length;
       if (!n) {
-        return `<button type="button" class="chip chip--slot is-empty" disabled aria-label="${d.label} ${d.date}: no openings"><span class="day">${d.label}</span><span class="time">None</span></button>`;
+        return '<button type="button" class="chip chip--slot is-empty" disabled aria-label="' + d.label + ' ' + d.date + ': no openings"><span class="day">' + d.label + '</span><span class="time">None</span></button>';
       }
-      return `<button type="button" class="chip chip--slot" data-open-provider="${p.id}" data-day="${d.key}" aria-label="${d.label} ${d.date}, ${n} openings"><span class="day">${d.label} · ${n}</span><span class="time">${d.slots[0]}</span></button>`;
+      return '<button type="button" class="chip chip--slot" data-open-provider="' + p.id + '" data-day="' + d.key + '" aria-label="' + d.label + ' ' + d.date + ', ' + n + ' openings"><span class="day">' + d.label + ' · ' + n + '</span><span class="time">' + daySlots(d)[0] + '</span></button>';
     }).join('');
-    const tele = p.tele || state.forceTele ? '<span class="badge badge--info">Video available</span>' : '<span class="badge badge--info">In person</span>';
-    return `
-      <article class="card provider" data-provider-card="${p.id}">
-        <div class="provider__top">
-          <div class="avatar" aria-hidden="true">${p.initials}</div>
-          <div class="provider__meta">
-            <h2 class="provider__name">${escapeHtml(p.name)}</h2>
-            <p class="provider__spec">${escapeHtml(p.plain)} <span class="muted">(${escapeHtml(p.specialty)})</span></p>
-            <div class="provider__row">
-              <span class="stars" aria-label="Rating ${p.rating} out of 5">★ ${p.rating}</span>
-              <span class="muted">${p.reviews} reviews</span>
-              <span>${p.miles} mi</span>
-            </div>
-            <div class="badge-row">
-              <span class="badge">In your plan</span>
-              <span class="badge">Accepting new patients</span>
-              ${tele}
-            </div>
-            <p class="muted" style="margin:4px 0 0">${escapeHtml(p.address)}</p>
-          </div>
-        </div>
-        <p class="slots-label">Next openings</p>
-        <div class="slots-row">${dayChips}</div>
-        <button type="button" class="btn btn--secondary btn--sm" data-open-provider="${p.id}" style="margin-top:8px">More times &amp; book</button>
-      </article>`;
+    var tele = (p.tele || state.forceTele) ? '<span class="badge badge--info">Video available</span>' : '<span class="badge badge--info">In person</span>';
+    var rating = (p.rating != null)
+      ? '<span class="stars" aria-label="Rating ' + p.rating + ' out of 5">★ ' + p.rating + '</span><span class="muted">' + p.reviews + ' reviews</span>'
+      : '<span class="muted">No rating in this prototype</span>';
+    var planOn = inPlan(p);
+    var nearOn = p.miles <= 15;
+    return (
+      '<article class="card provider" data-provider-card="' + p.id + '">' +
+        '<div class="provider__top">' +
+          '<div class="avatar" aria-hidden="true">' + p.initials + '</div>' +
+          '<div class="provider__meta">' +
+            '<h2 class="provider__name">' + escapeHtml(p.name) + '</h2>' +
+            '<p class="provider__spec">' + escapeHtml(p.plain) + ' <span class="muted">(' + escapeHtml(p.specialty) + ')</span></p>' +
+            '<div class="provider__row">' + rating + '<span>' + p.miles + ' mi</span></div>' +
+            '<div class="badge-row">' +
+              '<span class="badge' + (planOn ? ' badge--plan' : ' badge--warn') + '">' + escapeHtml(planBadgeLabel(p)) + '</span>' +
+              '<span class="badge' + (p.accepting ? '' : ' badge--warn') + '">' + (p.accepting ? 'Accepting new patients' : 'Not accepting new patients') + '</span>' +
+              '<span class="badge' + (nearOn ? ' badge--info' : ' badge--warn') + '">' + (nearOn ? 'Near you' : 'Farther away') + '</span>' +
+              tele +
+            '</div>' +
+            '<p class="muted" style="margin:4px 0 0">' + escapeHtml(p.address) + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="provider__actions">' +
+          '<button type="button" class="btn btn--primary" data-open-provider="' + p.id + '">Select appointment</button>' +
+          '<button type="button" class="btn btn--secondary" data-open-provider="' + p.id + '">Show details</button>' +
+        '</div>' +
+        '<div class="provider__slots">' +
+          '<p class="slots-label">Next openings</p>' +
+          '<div class="slots-row">' + slots + '</div>' +
+        '</div>' +
+      '</article>'
+    );
   }
 
   function renderDoctor() {
-    const p = getProvider(state.providerId);
+    var p = getProvider(state.providerId);
     if (!p) { showView('results'); return; }
-    const teleOn = p.tele || state.forceTele;
+    var teleOn = p.tele || state.forceTele;
     $('#telehealth-note').hidden = !teleOn;
-    $('#doctor-hero').innerHTML = `
-      <div class="card provider">
-        <div class="provider__top">
-          <div class="avatar" aria-hidden="true">${p.initials}</div>
-          <div class="provider__meta">
-            <h1 id="doctor-title" class="provider__name" style="font-size:1.55rem">${escapeHtml(p.name)}</h1>
-            <p class="provider__spec">${escapeHtml(p.plain)} · ${p.miles} mi</p>
-            <div class="badge-row">
-              <span class="badge">In your plan</span>
-              <span class="badge">Accepting new patients</span>
-              ${teleOn ? '<span class="badge badge--info">Telehealth</span>' : '<span class="badge badge--info">In person</span>'}
-            </div>
-            <p class="muted">${escapeHtml(p.address)}, ${escapeHtml(p.city)}</p>
-          </div>
-        </div>
-      </div>`;
+    var rating = (p.rating != null)
+      ? '<div class="provider__row"><span class="stars" aria-label="Rating ' + p.rating + ' out of 5">★ ' + p.rating + '</span><span class="muted">' + p.reviews + ' reviews</span></div>'
+      : '';
+    $('#doctor-hero').innerHTML =
+      '<div class="card provider">' +
+        '<div class="provider__top">' +
+          '<div class="avatar" aria-hidden="true">' + p.initials + '</div>' +
+          '<div class="provider__meta">' +
+            '<h1 id="doctor-title" class="provider__name" style="font-size:1.75rem">' + escapeHtml(p.name) + '</h1>' +
+            '<p class="provider__spec">' + escapeHtml(p.plain) + ' · ' + p.miles + ' mi</p>' +
+            rating +
+            '<div class="badge-row">' +
+              '<span class="badge' + (inPlan(p) ? ' badge--plan' : ' badge--warn') + '">' + escapeHtml(planBadgeLabel(p)) + '</span>' +
+              '<span class="badge' + (p.accepting ? '' : ' badge--warn') + '">' + (p.accepting ? 'Accepting new patients' : 'Not accepting new patients') + '</span>' +
+              (teleOn ? '<span class="badge badge--info">Telehealth</span>' : '<span class="badge badge--info">In person</span>') +
+            '</div>' +
+            '<p class="muted">' + escapeHtml(p.address) + ', ' + escapeHtml(p.city) + '</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
 
-    const days = $('#doctor-days');
-    days.innerHTML = `<div class="slots-row" role="tablist" aria-label="Days">${p.days.map(d => {
-      const selected = state.dayKey === d.key;
-      const empty = !d.slots.length;
-      return `<button type="button" role="tab" class="chip chip--slot chip--hero${selected ? ' is-selected' : ''}${empty ? ' is-empty' : ''}" data-day-pick="${d.key}" ${empty ? 'disabled' : ''} aria-selected="${selected}" aria-label="${d.label} ${d.date}${empty ? ', no openings' : ', ' + d.slots.length + ' openings'}"><span class="day">${d.label} ${d.date}</span><span class="time">${empty ? 'No times' : d.slots.length + ' open'}</span></button>`;
-    }).join('')}</div>`;
+    $('#pt-new').setAttribute('aria-pressed', state.patientType === 'new' ? 'true' : 'false');
+    $('#pt-existing').setAttribute('aria-pressed', state.patientType === 'existing' ? 'true' : 'false');
 
-    if (!state.dayKey) {
-      const first = p.days.find(d => d.slots.length);
-      if (first) state.dayKey = first.key;
-    }
-    const day = p.days.find(d => d.key === state.dayKey) || p.days[0];
-    const slotsEl = $('#doctor-slots');
-    if (!day || !day.slots.length) {
-      slotsEl.innerHTML = `<p class="card card--warn" style="margin:0"><strong>No openings this day.</strong> Pick another day above — we don’t hide empty days.</p>`;
+    var note = $('#new-patient-note');
+    if (state.patientType === 'new' && p.accepting) {
+      note.hidden = false;
+      note.innerHTML = '<strong>Accepting new patients.</strong> You’re covered to book as a new patient with this clinic in the prototype.';
+    } else if (state.patientType === 'new' && !p.accepting) {
+      note.hidden = false;
+      note.className = 'card card--warn';
+      note.innerHTML = '<strong>Not accepting new patients.</strong> Existing-patient openings may still appear. This clinic showed up because you turned off that default.';
     } else {
-      slotsEl.innerHTML = day.slots.map(t => {
-        const sel = state.slot === t && state.dayKey === day.key;
-        return `<button type="button" class="chip chip--slot chip--hero${sel ? ' is-selected' : ''}" data-slot-pick="${t}" aria-pressed="${sel}"><span class="day">${day.label}</span><span class="time">${t}</span></button>`;
+      note.hidden = false;
+      note.className = 'card card--info';
+      note.innerHTML = '<strong>Existing patient openings.</strong> These times assume the clinic already has your chart.';
+    }
+    if (state.patientType === 'new' && p.accepting) note.className = 'card card--success';
+
+    $('#doctor-days').innerHTML = '<div class="slots-row" role="tablist" aria-label="Days">' + p.days.map(function (d) {
+      var selected = state.dayKey === d.key;
+      var empty = !daySlots(d).length;
+      return '<button type="button" role="tab" class="chip chip--slot chip--hero' + (selected ? ' is-selected' : '') + (empty ? ' is-empty' : '') + '" data-day-pick="' + d.key + '" ' + (empty ? 'disabled' : '') + ' aria-selected="' + selected + '" aria-label="' + d.label + ' ' + d.date + (empty ? ', no openings' : ', ' + daySlots(d).length + ' openings') + '"><span class="day">' + d.label + ' ' + d.date + '</span><span class="time">' + (empty ? 'No times' : daySlots(d).length + ' open') + '</span></button>';
+    }).join('') + '</div>';
+
+    if (!state.dayKey || !p.days.some(function (d) { return d.key === state.dayKey && daySlots(d).length; })) {
+      var first = p.days.find(function (d) { return daySlots(d).length; });
+      state.dayKey = first ? first.key : null;
+      if (!first) state.slot = null;
+    }
+    var day = p.days.find(function (d) { return d.key === state.dayKey; }) || p.days[0];
+    var slotsEl = $('#doctor-slots');
+    var open = daySlots(day);
+    if (!day || !open.length) {
+      slotsEl.innerHTML = '<p class="card card--warn" style="margin:0"><strong>No openings this day.</strong> Pick another day above — we don’t hide empty days.</p>';
+    } else {
+      slotsEl.innerHTML = open.map(function (t) {
+        var sel = state.slot === t && state.dayKey === day.key;
+        return '<button type="button" class="chip chip--slot chip--hero' + (sel ? ' is-selected' : '') + '" data-slot-pick="' + t + '" aria-pressed="' + sel + '"><span class="day">' + day.label + '</span><span class="time">' + t + '</span></button>';
       }).join('');
     }
-    // re-mark selected day
-    $$('[data-day-pick]').forEach(btn => {
+    $$('[data-day-pick]').forEach(function (btn) {
       btn.classList.toggle('is-selected', btn.getAttribute('data-day-pick') === state.dayKey);
       btn.setAttribute('aria-selected', btn.getAttribute('data-day-pick') === state.dayKey ? 'true' : 'false');
     });
@@ -947,107 +1368,139 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   }
 
   function renderReview() {
-    const p = getProvider(state.providerId);
+    var p = getProvider(state.providerId);
     if (!p || !state.slot) { showView('doctor'); return; }
-    const day = p.days.find(d => d.key === state.dayKey);
-    const when = `${day.label}, ${day.date} · ${state.slot}`;
-    const who = state.forSomeone ? `For ${state.forSomeone.name} (you’re helping)` : 'For you (Diana)';
-    $('#review-card').innerHTML = `
-      <ul class="confirm-list">
-        <li><strong>Who</strong>${escapeHtml(who)}</li>
-        <li><strong>Provider</strong>${escapeHtml(p.name)} · ${escapeHtml(p.plain)}</li>
-        <li><strong>When</strong>${escapeHtml(when)}</li>
-        <li><strong>Where</strong>${escapeHtml(p.address)}${p.tele || state.forceTele ? ' · Video visit' : ''}</li>
-        <li><strong>Plan</strong>In your Medicare Advantage network (sample)</li>
-      </ul>`;
+    var day = p.days.find(function (d) { return d.key === state.dayKey; });
+    var when = day.label + ', ' + day.date + ' · ' + state.slot;
+    var who = state.who === 'someone' && state.forSomeone
+      ? 'For ' + state.forSomeone.name + ' (you’re helping)'
+      : 'For you (Diana)';
+    var chronicTxt = state.chronic.length
+      ? state.chronic.map(function (id) {
+          var c = CHRONIC.find(function (x) { return x.id === id; });
+          return c ? c.label : id;
+        }).join(', ')
+      : 'None selected';
+    var reason = state.condition ? state.condition.label : '—';
+    if (state.condition && state.condition.id === 'else' && state.otherNeed) reason = state.otherNeed;
+    $('#review-card').innerHTML =
+      '<ul class="confirm-list">' +
+        '<li><strong>Who</strong>' + escapeHtml(who) + '</li>' +
+        '<li><strong>Visit reason</strong>' + escapeHtml(reason) + '</li>' +
+        '<li><strong>Also living with</strong>' + escapeHtml(chronicTxt) + '</li>' +
+        '<li><strong>Provider</strong>' + escapeHtml(p.name) + ' · ' + escapeHtml(p.plain) + '</li>' +
+        '<li><strong>Patient type</strong>' + (state.patientType === 'new' ? 'New patient' : 'Existing patient') + '</li>' +
+        '<li><strong>When</strong>' + escapeHtml(when) + '</li>' +
+        '<li><strong>Where</strong>' + escapeHtml(p.address) + (p.tele || state.forceTele ? ' · Video visit' : '') + '</li>' +
+        '<li><strong>Plan</strong>' + escapeHtml(coverageLabel()) + (state.zip ? ' · ZIP ' + escapeHtml(state.zip) : '') + '</li>' +
+      '</ul>';
   }
 
   function renderSuccess() {
-    const a = state.appointment;
-    const body = $('#success-body');
+    var a = state.appointment;
+    var body = $('#success-body');
     if (!a) {
-      body.innerHTML = `<div class="card"><p>No booking yet.</p><button type="button" class="btn btn--primary" data-nav="home">Back to home</button></div>`;
+      body.innerHTML = '<div class="card"><p>No booking yet.</p><button type="button" class="btn btn--primary" data-nav="home">Back to home</button></div>';
       return;
     }
     if (a.pendingConfirm) {
-      body.innerHTML = `
-        <div class="card card--warn">
-          <h1 id="success-title">Request received — clinic will call</h1>
-          <p>We did <strong>not</strong> confirm this time online. The clinic will call you to confirm ${escapeHtml(a.whenLabel)} with ${escapeHtml(a.providerName)}.</p>
-          <p class="muted">Your request appears on Home as an upcoming visit marked “Clinic will call.”</p>
-          <div class="btn-row">
-            <button type="button" class="btn btn--secondary" data-action="calendar">Add to calendar (stub)</button>
-            <button type="button" class="btn btn--secondary" data-action="directions">Get directions</button>
-            <button type="button" class="btn btn--primary" data-nav="home">Back to home</button>
-          </div>
-        </div>`;
+      body.innerHTML =
+        '<div class="card card--warn">' +
+          '<h1 id="success-title">Request received — clinic will call</h1>' +
+          '<p>We did <strong>not</strong> confirm this time online. The clinic will call you to confirm ' + escapeHtml(a.whenLabel) + ' with ' + escapeHtml(a.providerName) + '.</p>' +
+          '<p class="muted">Your request appears on Home as an upcoming visit marked “Clinic will call.”</p>' +
+          '<div class="btn-row">' +
+            '<button type="button" class="btn btn--secondary" data-action="calendar">Add to calendar (stub)</button>' +
+            '<button type="button" class="btn btn--secondary" data-action="directions">Get directions</button>' +
+            '<button type="button" class="btn btn--primary" data-nav="home">Back to home</button>' +
+          '</div>' +
+        '</div>';
       return;
     }
-    body.innerHTML = `
-      <div class="card card--success">
-        <h1 id="success-title">You’re booked</h1>
-        <p class="appt-when" style="font-size:1.25rem">${escapeHtml(a.whenLabel)}</p>
-        <p><strong>${escapeHtml(a.providerName)}</strong> · ${escapeHtml(a.specialty)}</p>
-        <p class="muted">${escapeHtml(a.address)}${a.tele ? ' · Video visit' : ''}</p>
-        <div class="btn-row">
-          <button type="button" class="btn btn--secondary" data-action="calendar">Add to calendar (stub)</button>
-          <button type="button" class="btn btn--secondary" data-action="directions">Get directions</button>
-          <button type="button" class="btn btn--primary" data-nav="home">Go to appointment on home</button>
-        </div>
-      </div>`;
+    body.innerHTML =
+      '<div class="card card--success">' +
+        '<h1 id="success-title">You’re booked</h1>' +
+        '<p class="appt-when" style="font-size:1.25rem">' + escapeHtml(a.whenLabel) + '</p>' +
+        '<p><strong>' + escapeHtml(a.providerName) + '</strong> · ' + escapeHtml(a.specialty) + '</p>' +
+        '<p class="muted">' + escapeHtml(a.address) + (a.tele ? ' · Video visit' : '') + '</p>' +
+        '<div class="btn-row">' +
+          '<button type="button" class="btn btn--secondary" data-action="calendar">Add to calendar (stub)</button>' +
+          '<button type="button" class="btn btn--secondary" data-action="directions">Get directions</button>' +
+          '<button type="button" class="btn btn--primary" data-nav="home">Go to appointment on home</button>' +
+        '</div>' +
+      '</div>';
   }
 
   function renderAppointments() {
-    const el = $('#appts-list');
+    var el = $('#appts-list');
     if (!state.appointment) {
-      el.innerHTML = `<div class="card empty-state"><h2>No upcoming appointments</h2><p class="muted">When you book, the visit shows here and as a tile on Home.</p><button type="button" class="btn btn--primary" data-nav="need">Schedule an appointment</button></div>`;
+      el.innerHTML = '<div class="card empty-state"><h2>No upcoming appointments</h2><p class="muted">When you book, the visit shows here and as a tile on Home.</p><button type="button" class="btn btn--primary" data-nav="who">Schedule an appointment</button></div>';
       return;
     }
-    const a = state.appointment;
-    el.innerHTML = `
-      <div class="card appt-tile card--accent">
-        <p class="muted" style="margin:0;font-weight:700;text-transform:uppercase;font-size:13px">Upcoming</p>
-        <p class="appt-when">${escapeHtml(a.whenLabel)}</p>
-        <p><strong>${escapeHtml(a.providerName)}</strong> · ${escapeHtml(a.specialty)}</p>
-        <p class="muted">${escapeHtml(a.address)} · ${a.miles} mi${a.tele ? ' · Video' : ''}${a.pendingConfirm ? ' · Clinic will call' : ''}</p>
-        ${a.note ? `<p><strong>Your note:</strong> ${escapeHtml(a.note)}</p>` : ''}
-        <div class="appt-actions">
-          <button type="button" class="btn btn--secondary btn--sm" data-action="directions">Get directions</button>
-          <button type="button" class="btn btn--ghost btn--sm" disabled>Reschedule · Next</button>
-          <button type="button" class="btn btn--ghost btn--sm" data-nav="home">Home</button>
-        </div>
-      </div>`;
+    var a = state.appointment;
+    el.innerHTML =
+      '<div class="card appt-tile card--accent">' +
+        '<p class="muted" style="margin:0;font-weight:600;text-transform:uppercase;font-size:1rem">Upcoming</p>' +
+        '<p class="appt-when">' + escapeHtml(a.whenLabel) + '</p>' +
+        '<p><strong>' + escapeHtml(a.providerName) + '</strong> · ' + escapeHtml(a.specialty) + '</p>' +
+        '<p class="muted">' + escapeHtml(a.address) + ' · ' + a.miles + ' mi' + (a.tele ? ' · Video' : '') + (a.pendingConfirm ? ' · Clinic will call' : '') + '</p>' +
+        (a.note ? '<p><strong>Your note:</strong> ' + escapeHtml(a.note) + '</p>' : '') +
+        '<div class="appt-actions">' +
+          '<button type="button" class="btn btn--secondary btn--sm" data-action="directions">Get directions</button>' +
+          '<button type="button" class="btn btn--ghost btn--sm" disabled>Reschedule · Next</button>' +
+          '<button type="button" class="btn btn--ghost btn--sm" data-nav="home">Home</button>' +
+        '</div>' +
+      '</div>';
   }
 
   function escapeHtml(s) {
     return String(s == null ? '' : s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function searchHits(q) {
+    q = (q || '').trim().toLowerCase();
+    if (!q) return [];
+    return VISIT_REASONS.filter(function (c) {
+      return (c.label + ' ' + c.specialty + ' ' + (c.also || '') + ' ' + (c.synonyms || '')).toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 6);
+  }
+
+  function renderSuggest(q) {
+    var box = $('#need-suggest');
+    var hits = searchHits(q);
+    if (!hits.length) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    box.innerHTML = hits.map(function (c) {
+      return '<li><button type="button" data-cond="' + c.id + '">' + escapeHtml(c.label) + '<span class="hit-spec">' + escapeHtml(c.specialty) + '</span></button></li>';
+    }).join('');
   }
 
   function bookAppointment() {
-    const p = getProvider(state.providerId);
-    const day = p.days.find(d => d.key === state.dayKey);
-    // Demo: first book attempt after enabling demo can hit slot taken
+    var p = getProvider(state.providerId);
+    var day = p.days.find(function (d) { return d.key === state.dayKey; });
     if (state.slotTakenOnce) {
       state.slotTakenOnce = false;
       showView('slot-taken');
       return;
     }
-    const pending = state.forceCallConfirm;
-    const appt = {
+    var reason = state.condition && state.condition.label;
+    if (state.condition && state.condition.id === 'else' && state.otherNeed) reason = state.otherNeed;
+    var appt = {
       providerId: p.id,
       providerName: p.name,
       specialty: p.plain,
       address: p.address,
       miles: p.miles,
       tele: !!(p.tele || state.forceTele),
-      whenLabel: `${day.label}, ${day.date} · ${state.slot}`,
+      whenLabel: day.label + ', ' + day.date + ' · ' + state.slot,
       dayKey: state.dayKey,
       slot: state.slot,
       note: ($('#note-provider') && $('#note-provider').value) || '',
       forSomeone: state.forSomeone,
-      pendingConfirm: pending,
-      condition: state.condition && state.condition.label
+      pendingConfirm: state.forceCallConfirm,
+      condition: reason,
+      patientType: state.patientType
     };
     state.appointment = appt;
     state.forceCallConfirm = false;
@@ -1055,149 +1508,237 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
     showView('success');
   }
 
-  // Events
-  document.addEventListener('click', (e) => {
-    const nav = e.target.closest('[data-nav]');
+  function openFilterSheet() {
+    var sheet = $('#filter-sheet');
+    var scrim = $('#sheet-scrim');
+    sheet.hidden = false;
+    scrim.hidden = false;
+    sheet.classList.add('is-open');
+    scrim.classList.add('is-open');
+    $('#show-more-options').setAttribute('aria-expanded', 'true');
+    $('#opt-plan').focus();
+  }
+
+  function closeFilterSheet() {
+    var sheet = $('#filter-sheet');
+    var scrim = $('#sheet-scrim');
+    sheet.classList.remove('is-open');
+    scrim.classList.remove('is-open');
+    sheet.hidden = true;
+    scrim.hidden = true;
+    $('#show-more-options').setAttribute('aria-expanded', 'false');
+    if ($('#view-results').classList.contains('is-active')) renderResults();
+  }
+
+  function seedHappyPath(condId) {
+    state.zip = state.zip || '10001';
+    state.coverage = state.coverage || 'advantage';
+    state.who = state.who || 'me';
+    state.condition = findCondition(condId);
+    state.trust = { plan: true, accepting: true, near: true };
+  }
+
+  document.addEventListener('click', function (e) {
+    var nav = e.target.closest('[data-nav]');
     if (nav) {
       e.preventDefault();
-      const name = nav.getAttribute('data-nav');
-      if (name === 'need') {
-        state.forceEmpty = false;
-      }
+      var name = nav.getAttribute('data-nav');
+      if (name === 'need' || name === 'who') state.forceEmpty = false;
       showView(name);
       return;
     }
-    const cond = e.target.closest('[data-cond]');
+    var whoBtn = e.target.closest('[data-who]');
+    if (whoBtn) {
+      state.who = whoBtn.getAttribute('data-who');
+      if (state.who === 'me') state.forSomeone = null;
+      renderWho();
+      return;
+    }
+    var covBtn = e.target.closest('[data-coverage]');
+    if (covBtn) {
+      state.coverage = covBtn.getAttribute('data-coverage');
+      renderCoverage();
+      return;
+    }
+    var cond = e.target.closest('[data-cond]');
     if (cond) {
       state.condition = findCondition(cond.getAttribute('data-cond'));
-      $('#need-continue').disabled = !state.condition;
+      $('#need-suggest').hidden = true;
       renderNeed();
       return;
     }
-    const openP = e.target.closest('[data-open-provider]');
+    var chronic = e.target.closest('[data-chronic]');
+    if (chronic) {
+      var cid = chronic.getAttribute('data-chronic');
+      var ix = state.chronic.indexOf(cid);
+      if (ix === -1) state.chronic.push(cid);
+      else state.chronic.splice(ix, 1);
+      renderNeed();
+      return;
+    }
+    var openP = e.target.closest('[data-open-provider]');
     if (openP) {
       state.providerId = openP.getAttribute('data-open-provider');
       state.dayKey = openP.getAttribute('data-day') || null;
       state.slot = null;
       if (openP.getAttribute('data-day')) {
-        const p = getProvider(state.providerId);
-        const d = p && p.days.find(x => x.key === state.dayKey);
-        if (d && d.slots.length) state.slot = d.slots[0];
+        var p = getProvider(state.providerId);
+        var d = p && p.days.find(function (x) { return x.key === state.dayKey; });
+        var open = d ? daySlots(d) : [];
+        if (open.length) state.slot = open[0];
       }
       showView('doctor');
       return;
     }
-    const dayPick = e.target.closest('[data-day-pick]');
+    var dayPick = e.target.closest('[data-day-pick]');
     if (dayPick && !dayPick.disabled) {
       state.dayKey = dayPick.getAttribute('data-day-pick');
       state.slot = null;
       renderDoctor();
       return;
     }
-    const slotPick = e.target.closest('[data-slot-pick]');
+    var slotPick = e.target.closest('[data-slot-pick]');
     if (slotPick) {
       state.slot = slotPick.getAttribute('data-slot-pick');
       renderDoctor();
       return;
     }
-    const action = e.target.closest('[data-action]');
+    var action = e.target.closest('[data-action]');
     if (action) {
-      const a = action.getAttribute('data-action');
+      var a = action.getAttribute('data-action');
       if (a === 'calendar') alert('Add to calendar is a stub in this prototype.');
       if (a === 'directions') alert('Get directions is a stub — address is listed on the appointment tile (not map-only).');
       return;
     }
   });
 
-  $('#need-continue').addEventListener('click', () => {
-    state.facility = $('#facility-type').value;
-    if (state.facility === 'tele') state.forceTele = true;
-    showView('specialty');
+  $('#who-continue').addEventListener('click', function () {
+    if (state.who === 'someone') {
+      var name = ($('#care-name').value || '').trim() || 'your family member';
+      state.forSomeone = { name: name, rel: $('#care-rel').value };
+    } else {
+      state.forSomeone = null;
+    }
+    showView('coverage');
   });
-  $('#spec-confirm').addEventListener('click', () => showView('results'));
-  $('#doctor-continue').addEventListener('click', () => showView('review'));
-  $('#confirm-book').addEventListener('click', bookAppointment);
-  $('#someone-continue').addEventListener('click', () => {
-    const name = ($('#care-name').value || '').trim() || 'your family member';
-    state.forSomeone = { name, rel: $('#care-rel').value };
+  $('#coverage-continue').addEventListener('click', function () { showView('location'); });
+  $('#location-continue').addEventListener('click', function () {
+    state.zip = ($('#zip-input').value || '').trim();
     showView('need');
   });
-
-  $('#show-more-options').addEventListener('click', () => {
-    const panel = $('#more-options');
-    const open = panel.hidden;
-    panel.hidden = !open;
-    $('#show-more-options').setAttribute('aria-expanded', open ? 'true' : 'false');
-    $('#show-more-options').textContent = open ? 'Hide more options' : 'Show more options';
+  $('#need-continue').addEventListener('click', function () {
+    state.otherNeed = ($('#other-need').value || '').trim();
+    showView('results');
+  });
+  $('#doctor-continue').addEventListener('click', function () { showView('review'); });
+  $('#confirm-book').addEventListener('click', bookAppointment);
+  $('#home-someone').addEventListener('click', function () {
+    state.who = 'someone';
+    showView('who');
   });
 
-  ['opt-plan','opt-accepting','opt-near'].forEach(id => {
-    $('#' + id).addEventListener('change', (e) => {
-      const map = { 'opt-plan': 'plan', 'opt-accepting': 'accepting', 'opt-near': 'near' };
-      state.trust[map[id]] = e.target.checked;
-      state.forceEmpty = false;
-      // unlock visual chips when off
-      renderResults();
-    });
+  $('#zip-input').addEventListener('input', function (e) {
+    state.zip = e.target.value.replace(/\D/g, '').slice(0, 5);
+    e.target.value = state.zip;
+    e.target.classList.toggle('is-error', state.zip.length > 0 && state.zip.length < 5);
+    $('#location-continue').disabled = !/^\d{5}$/.test(state.zip);
   });
+  $('#other-need').addEventListener('input', function (e) { state.otherNeed = e.target.value; });
 
-  $('#need-search').addEventListener('input', (e) => {
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) return;
-    const hit = allConditions().find(c =>
-      c.label.toLowerCase().includes(q) ||
-      c.specialty.toLowerCase().includes(q) ||
-      (c.also && c.also.toLowerCase().includes(q))
-    );
-    if (hit) {
-      state.condition = hit;
-      $('#need-continue').disabled = false;
+  $('#need-search').addEventListener('input', function (e) {
+    var q = e.target.value;
+    renderSuggest(q);
+    var hits = searchHits(q);
+    if (hits.length === 1 && q.trim().length >= 3) {
+      state.condition = hits[0];
       renderNeed();
+      renderSuggest(q);
+    }
+  });
+  $('#need-search').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      var hits = searchHits(e.target.value);
+      if (hits[0]) {
+        state.condition = hits[0];
+        $('#need-suggest').hidden = true;
+        renderNeed();
+      }
     }
   });
 
-  $('#btn-logout').addEventListener('click', () => alert('Log out is a stub.'));
-  $('#btn-menu').addEventListener('click', () => {
-    const nav = $('#app-nav');
-    const expanded = $('#btn-menu').getAttribute('aria-expanded') === 'true';
+  $('#pt-new').addEventListener('click', function () {
+    state.patientType = 'new';
+    state.slot = null;
+    renderDoctor();
+  });
+  $('#pt-existing').addEventListener('click', function () {
+    state.patientType = 'existing';
+    state.slot = null;
+    renderDoctor();
+  });
+
+  $('#show-more-options').addEventListener('click', openFilterSheet);
+  $('#filter-close').addEventListener('click', closeFilterSheet);
+  $('#sheet-scrim').addEventListener('click', closeFilterSheet);
+  $('#filter-apply').addEventListener('click', function () {
+    state.trust.plan = $('#opt-plan').checked;
+    state.trust.accepting = $('#opt-accepting').checked;
+    state.trust.near = $('#opt-near').checked;
+    state.forceEmpty = false;
+    closeFilterSheet();
+  });
+  ['opt-plan', 'opt-accepting', 'opt-near'].forEach(function (id) {
+    $('#' + id).addEventListener('change', function () {
+      var map = { 'opt-plan': 'plan', 'opt-accepting': 'accepting', 'opt-near': 'near' };
+      state.trust[map[id]] = $('#' + id).checked;
+    });
+  });
+
+  $('#btn-login').addEventListener('click', function () { alert('Log in is a stub.'); });
+  $('#btn-chat').addEventListener('click', function () { alert('Chat is a stub.'); });
+  $('#btn-menu').addEventListener('click', function () {
+    var nav = $('#app-nav');
+    var expanded = $('#btn-menu').getAttribute('aria-expanded') === 'true';
     $('#btn-menu').setAttribute('aria-expanded', expanded ? 'false' : 'true');
     nav.style.display = expanded ? '' : 'block';
     announce(expanded ? 'Menu collapsed' : 'Menu expanded — Home, My appointments, Schedule');
   });
 
-  $('#demo-empty').addEventListener('click', () => {
+  $('#demo-empty').addEventListener('click', function () {
+    seedHappyPath('heart');
     state.forceEmpty = true;
-    state.condition = findCondition('heart');
     showView('results');
   });
-  $('#demo-slot-taken').addEventListener('click', () => {
+  $('#demo-slot-taken').addEventListener('click', function () {
+    seedHappyPath('wellness');
     state.slotTakenOnce = true;
-    state.condition = findCondition('wellness');
     state.providerId = 'rivera';
     state.dayKey = 'thu';
-    state.slot = '9:00 AM';
+    state.slot = '10:30 AM';
+    state.patientType = 'new';
     alert('Next Book attempt will show “That time was just taken.” Continue to Review and book.');
     showView('review');
   });
-  $('#demo-call').addEventListener('click', () => {
+  $('#demo-call').addEventListener('click', function () {
+    seedHappyPath('wellness');
     state.forceCallConfirm = true;
-    state.condition = findCondition('wellness');
     state.providerId = 'rivera';
     state.dayKey = 'fri';
     state.slot = '11:00 AM';
+    state.patientType = 'new';
     showView('review');
     announce('Clinic-will-call demo ready — press Book appointment');
   });
-  $('#demo-tele').addEventListener('click', () => {
+  $('#demo-tele').addEventListener('click', function () {
+    seedHappyPath('skin');
     state.forceTele = true;
-    state.facility = 'tele';
-    state.condition = findCondition('skin');
     state.providerId = 'nguyen';
     state.dayKey = 'fri';
     state.slot = null;
     showView('doctor');
   });
-  $('#demo-clear').addEventListener('click', () => {
+  $('#demo-clear').addEventListener('click', function () {
     state.appointment = null;
     state.forceEmpty = false;
     state.forceCallConfirm = false;
@@ -1208,11 +1749,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
     announce('Booking cleared');
   });
 
-  // Hash routing
   function fromHash() {
-    const h = (location.hash || '#home').replace(/^#/, '') || 'home';
-    const allowed = ['home','someone','need','specialty','results','doctor','review','success','slot-taken','appointments'];
-    showView(allowed.includes(h) ? h : 'home');
+    var h = (location.hash || '#home').replace(/^#/, '') || 'home';
+    var allowed = ['home', 'who', 'coverage', 'location', 'need', 'results', 'doctor', 'review', 'success', 'slot-taken', 'appointments'];
+    showView(allowed.indexOf(h) !== -1 ? h : 'home');
   }
   window.addEventListener('hashchange', fromHash);
   fromHash();

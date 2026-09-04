@@ -29,7 +29,13 @@
 - Condition taxonomy: ask David/CMS (or Zocdoc); Claude guess OK now, backfill later.
 - Pace: fast Tue-Thu iterations; David/Anya protect focus.
 
+## Tokens applied (Sep 4, 2026 — Tuesday soft-launch pass)
+- Primary is **Medicare Green** `#146A5D` (not Ocean `#0071bc`). Header `#0A352F`.
+- Inter + 20px body-large floor; 16px labels / button text.
+- Visit-reason chips (Medicare Zocdoc-style) + chronic refine group.
+- Trust defaults stay sticky; ratings stay on cards only.
+
 ## Open threads
 - Zocdoc call on data reliability (in-network / accepting new patients).
-- Ping David for condition taxonomy when ready.
+- Ping David for condition taxonomy when ready (starter list is in `refs/taxonomy.md`).
 - Figma edit access still pending (view-only for now).

@@ -1,64 +1,62 @@
-# Condition → specialty taxonomy
+# Visit reason → specialty taxonomy
 
-Aligned with Stay Put IA and `patterns-and-taxonomy.md`. Homepage shows **Top 8 + Something else**; full ~22 list under “More reasons.”
+Aligned with Stay Put IA, Tuesday soft-launch, and `patterns-and-taxonomy.md`. Entry is **visit-reason chips + search** (Zocdoc-style, Medicare plain language). Chronic conditions are an **optional refine group**, not a separate product.
 
-## Homepage chips (Top 8 + Something else)
+## Visit-reason chips (primary)
 
 | Chip (plain language) | Maps to specialty |
 |---|---|
+| Annual wellness visit | Primary care |
 | High blood pressure | Primary care · Cardiology |
-| Heart concerns | Cardiology |
-| Joint or arthritis pain | Orthopedics · Primary care |
-| Diabetes / blood sugar | Endocrinology · Primary care |
-| Skin rash or mole check | Dermatology |
-| Vision / eye exam | Ophthalmology |
+| Diabetes checkup | Primary care · Endocrinology |
+| Heart concerns | Cardiology (*red-flag ER banner*) |
+| Joint or back pain | Orthopedics · Primary care |
+| Skin rash | Dermatology |
+| Breathing problems | Pulmonology · Primary care |
+| Depression or anxiety | Behavioral health · Primary care (*988 crisis note*) |
+| Vision | Ophthalmology |
 | Hearing | Hearing / ENT (Audiology) |
-| Annual checkup / wellness | Primary care |
-| Something else | Primary care (or free-text refine) |
+| Women’s health | Obstetrics & Gynecology · Primary care |
+| Stomach pain | Gastroenterology · Primary care |
+| Fall or injury | Primary care · Orthopedics |
+| Mammogram / breast screening | Breast imaging · Obstetrics & Gynecology |
+| Something else | Primary care (free-text refine) |
 
-## Full starter list (~22)
+Search synonyms (examples): yearly physical / AWV; hypertension / BP; A1C / blood sugar; chest / cardiac; arthritis / knee / sciatica; rash / mole; COPD / wheeze; mood / anxiety; eye / cataract; hearing aid; gyn / pap; GERD / belly; fell / sprain; mammogram / breast.
 
-| ID | Plain language | Maps to |
-|---|---|---|
-| A1 | Annual checkup / wellness visit | Primary care, Geriatrics |
-| A2 | New primary doctor | Primary care, Geriatrics |
-| A3 | Vaccines & shots | Primary care, Urgent care |
-| A4 | Medication review / refill help | Primary care, Geriatrics |
-| B1 | High blood pressure | Primary care; Cardiology if complex |
-| B2 | Heart problems / chest concerns | Cardiology (*red-flag ER banner*) |
-| B3 | High cholesterol | Primary care |
-| C1 | Joint / arthritis pain | Primary care, Rheumatology, Orthopedics |
-| C2 | Back or neck pain | Primary care, Orthopedics |
-| C3 | Fall / balance / walking trouble | Primary care, Geriatrics, Neurology |
-| D1 | Diabetes / blood sugar | Primary care, Endocrinology |
-| D2 | Kidney concerns | Primary care, Nephrology |
-| D3 | Breathing / lung problems | Primary care, Pulmonology |
-| E1 | Memory or thinking changes | Primary care, Geriatrics, Neurology |
-| E2 | Feeling down or anxious | Primary care, Behavioral health |
-| E3 | Numbness / neuropathy | Primary care, Neurology |
-| F1 | Vision / eye exam | Ophthalmology, Optometry |
-| F2 | Hearing | Audiology, ENT |
-| F3 | Skin check / rash | Dermatology; Primary care |
-| F4 | Dental / toothache | Dentistry (coverage varies—disclose) |
-| G1 | Cold, flu, sinus, UTI | Urgent care, Primary care, Telehealth |
-| G2 | Minor injury | Urgent care, Orthopedics |
+## Chronic refine (secondary, multi-select, optional)
+
+Shown under visit reasons as “Also living with.” Does **not** replace the visit reason and does not hard-filter the directory in this prototype.
+
+- Diabetes
+- High blood pressure
+- Heart disease
+- COPD / lung disease
+- Arthritis
+- Depression
 
 ## Specialty labels used in confirm / results
 
-Cardiology, Dermatology, Orthopedics, Ophthalmology, Hearing / ENT, Urology, Gastroenterology, Endocrinology, Pulmonology, Neurology, Behavioral health, Obstetrics & Gynecology, Primary care, Urgent care, Something else.
+Cardiology, Dermatology, Orthopedics, Ophthalmology, Hearing / ENT, Gastroenterology, Pulmonology, Behavioral health, Obstetrics & Gynecology, Breast imaging, Primary care, Something else.
 
 ## Trust defaults (sticky chips — always on)
 
-- **In your plan**
+- **In your plan** — Advantage: mock network. Original: accepts Medicare assignment.
 - **Accepting new patients**
-- **Near you**
+- **Near you** (~15 miles from ZIP)
 
-Turning any off requires **Show more options** + a warning that results may include out-of-plan or not-accepting providers.
+Turning any off requires **Show more options** (bottom sheet) + a warning that results may include out-of-plan or not-accepting providers.
+
+Every result card shows honest badges for plan, accepting, and near — including warn badges when a default is off.
+
+## Ratings
+
+Compact `★ 4.8 · 214 reviews` on the card when mock data has a rating. **Not** a top-level filter or sort. Some providers have no rating (honest empty).
 
 ## UX rules
 
-1. After chip pick → **confirm mapped specialty** before Results.
+1. After reason pick → show mapped specialty on the Need screen, then Results (no extra confirm page).
 2. Prefer Primary care when in doubt; specialty when clearly specialty-led.
-3. Red-flag banner for chest pain / stroke / crisis → do not complete booking.
-4. On-card slots (2–4) + doctor page with live slots above the fold.
+3. Red-flag banner for chest pain / stroke / crisis → do not complete emergency booking.
+4. On-card slots (2–4) + doctor page with live slots and new/existing toggle.
 5. Honest empties: no in-network+accepting combo; slot taken; clinic will call (not “You’re booked”); telehealth only; empty day.
