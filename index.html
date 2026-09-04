@@ -522,6 +522,24 @@ body.lab-desktop .phone-screen {
   position: relative; inset: auto; padding: 0; overflow: visible;
 }
 
+/* Real phone/tablet: no Design Lab chrome — clean mobile app chrome */
+body.lab-native .lab-bar { display: none !important; }
+body.lab-native .lab-stage {
+  background: var(--color-surface); min-height: 100vh; min-height: 100dvh; padding: 0;
+}
+body.lab-native .phone-frame {
+  width: 100%; height: auto; min-height: 100vh; min-height: 100dvh;
+  margin: 0; border: 0; border-radius: 0; box-shadow: none; overflow: visible;
+}
+body.lab-native .phone-safe-top,
+body.lab-native .phone-safe-bottom,
+body.lab-native .fold-line { display: none !important; }
+body.lab-native .phone-screen {
+  position: relative; inset: auto; padding: 0;
+  overflow: visible; min-height: 100vh; min-height: 100dvh;
+}
+body.lab-native .filter-sheet { bottom: 0; }
+
 /* Fold screens: drop global chrome so Results/Book fit 390×844 */
 body.lab-mobile.lab-fold .usa-banner,
 body.lab-mobile.lab-fold .site-header,
@@ -1893,21 +1911,41 @@ body.lab-desktop #results-lede { display: none; }
     renderDoctor();
   });
 
+  function isNativeMobileDevice() {
+    try {
+      if (window.matchMedia('(max-width: 820px)').matches) return true;
+      if (window.matchMedia('(hover: none) and (pointer: coarse)').matches &&
+          window.matchMedia('(max-width: 1024px)').matches) return true;
+    } catch (err) {}
+    return false;
+  }
   function setPreview(mode) {
-    var mobile = mode !== 'desktop';
+    var native = isNativeMobileDevice();
+    document.body.classList.toggle('lab-native', native);
+    // On a real phone: always clean mobile layout, no critique chrome
+    var mobile = native ? true : (mode !== 'desktop');
     document.body.classList.toggle('lab-mobile', mobile);
     document.body.classList.toggle('lab-desktop', !mobile);
-    $('#lab-mobile').setAttribute('aria-pressed', mobile ? 'true' : 'false');
-    $('#lab-desktop').setAttribute('aria-pressed', mobile ? 'false' : 'true');
-    $('#lab-hint').textContent = mobile
-      ? '390×844 phone · red line = above the fold'
-      : 'Desktop 2-column · list | detail (not scaled mobile)';
-    try { localStorage.setItem('medicareLabPreview', mobile ? 'mobile' : 'desktop'); } catch (err) {}
+    var labBar = document.querySelector('.lab-bar');
+    if (labBar) labBar.hidden = native;
+    if (!native) {
+      $('#lab-mobile').setAttribute('aria-pressed', mobile ? 'true' : 'false');
+      $('#lab-desktop').setAttribute('aria-pressed', mobile ? 'false' : 'true');
+      $('#lab-hint').textContent = mobile
+        ? '390×844 phone · red line = above the fold'
+        : 'Desktop 2-column · list | detail (not scaled mobile)';
+      try { localStorage.setItem('medicareLabPreview', mobile ? 'mobile' : 'desktop'); } catch (err) {}
+    }
     var h = (location.hash || '#home').replace(/^#/, '') || 'home';
     if (h === 'results' || h === 'doctor') render(h);
   }
   $('#lab-mobile').addEventListener('click', function () { setPreview('mobile'); });
   $('#lab-desktop').addEventListener('click', function () { setPreview('desktop'); });
+  window.addEventListener('resize', function () {
+    var saved = '';
+    try { saved = localStorage.getItem('medicareLabPreview') || ''; } catch (err) {}
+    setPreview(saved === 'desktop' ? 'desktop' : 'mobile');
+  });
   $('#book-next-day').addEventListener('click', showNextBookDay);
   $('#show-more-options').addEventListener('click', openFilterSheet);
   $('#show-more-below').addEventListener('click', openFilterSheet);
@@ -2011,7 +2049,15 @@ body.lab-desktop #results-lede { display: none; }
   try { previewQ = new URLSearchParams(location.search).get('preview') || ''; } catch (err) {}
   var savedPreview = '';
   try { savedPreview = localStorage.getItem('medicareLabPreview') || ''; } catch (err) {}
-  setPreview(previewQ === 'desktop' || savedPreview === 'desktop' ? 'desktop' : 'mobile');
+  // Phones: ignore saved desktop preference and force native mobile.
+  // Desktop: honor ?preview= and localStorage toggle.
+  if (isNativeMobileDevice()) {
+    setPreview('mobile');
+  } else if (previewQ === 'desktop' || previewQ === 'mobile') {
+    setPreview(previewQ);
+  } else {
+    setPreview(savedPreview === 'desktop' ? 'desktop' : 'mobile');
+  }
   fromHash();
 })();
 </script>
