@@ -1,0 +1,14 @@
+---
+description: Medicare Appointment Scheduler Stay Put prototype
+alwaysApply: true
+---
+
+# Medicare Scheduler (Stay Put)
+
+- CMS Design System feel: primary #0071bc, header #00395e
+- Body text floor **20px** (Liz/DS). 16px only for labels/disclaimers. 16px = 1rem.
+- Trust defaults always visible: In your plan, Accepting new patients, Near you
+- Mobile-first; 44px touch targets; accessible for 65+
+- Start fresh v2 concepts; do not overload sensitive v1 reskin page
+- Concept freer; Figma handoff must use Triptych/CMS components consistently
+- Partners: Sunfire (network), Zocdoc (scheduling)
