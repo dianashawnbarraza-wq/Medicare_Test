@@ -439,28 +439,221 @@ input.is-error { border-color: var(--color-error); }
 .mapped { margin: 0 0 16px; padding: 12px 14px; background: var(--color-secondary-lightest); border-radius: var(--radius); border: 1px solid var(--color-secondary-light); }
 
 @media (min-width: 960px) {
-  h1 { font-size: 2.25rem; } /* 36px H4 desktop */
+  h1 { font-size: 2.25rem; }
   .wrap { padding: 24px 20px; }
   .site-header__inner { padding: 16px 20px; }
   .btn-row { flex-direction: row; align-items: stretch; }
   .btn-row .btn { flex: 1; }
   .choice-grid { flex-direction: row; }
   .choice { flex: 1; }
-  .results-layout { grid-template-columns: 1fr 300px; align-items: start; }
-  .summary-panel { display: block; position: sticky; top: 12px; }
-  .sticky-cta { margin-left: 0; margin-right: 0; border-radius: var(--radius); }
-  .provider { grid-template-columns: 1fr auto; align-items: start; }
-  .provider__slots { grid-column: 1 / -1; }
-  .avatar { width: 64px; height: 64px; }
-  .filter-sheet {
-    left: auto; right: 24px; bottom: auto; top: 120px; width: 400px;
-    border-radius: var(--radius-lg); max-height: calc(100vh - 160px);
-  }
 }
+
+/* —— Design Lab critique chrome —— */
+.lab-bar {
+  position: sticky; top: 0; z-index: 200;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
+  padding: 8px 16px; min-height: 52px;
+  background: var(--color-primary-darkest); color: var(--color-white);
+  font-size: 14px; font-weight: 600;
+}
+.lab-bar__brand { letter-spacing: .02em; }
+.lab-bar__hint { font-weight: 400; opacity: .85; font-size: 13px; }
+.lab-toggle {
+  display: inline-flex; border: 1px solid rgba(255,255,255,.45); border-radius: 999px; overflow: hidden;
+}
+.lab-toggle button {
+  min-height: 36px; padding: 6px 16px; border: 0; background: transparent;
+  color: var(--color-white); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.lab-toggle button[aria-pressed="true"] { background: var(--color-primary); }
+.lab-stage { background: #1b1b1b; min-height: calc(100vh - 52px); padding: 16px 12px 24px; }
+.phone-frame {
+  position: relative;
+  width: 390px; height: 844px;
+  margin: 0 auto;
+  background: var(--color-white);
+  border: 10px solid #111; border-radius: 40px;
+  box-shadow: 0 18px 48px rgba(0,0,0,.45);
+  overflow: hidden;
+}
+.phone-safe-top, .phone-safe-bottom {
+  position: absolute; left: 0; right: 0; z-index: 60; pointer-events: none;
+  background: #111;
+}
+.phone-safe-top { top: 0; height: 47px; }
+.phone-safe-top::after {
+  content: ""; position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  width: 118px; height: 22px; border-radius: 12px; background: #000;
+}
+.phone-safe-bottom { bottom: 0; height: 34px; }
+.phone-safe-bottom::after {
+  content: ""; position: absolute; left: 50%; top: 12px; transform: translateX(-50%);
+  width: 128px; height: 5px; border-radius: 4px; background: #444;
+}
+.phone-screen {
+  position: absolute; inset: 0;
+  padding-top: 47px; padding-bottom: 34px;
+  overflow-x: hidden; overflow-y: auto;
+  background: var(--color-surface);
+  -webkit-overflow-scrolling: touch;
+}
+.fold-line {
+  position: absolute; left: 0; right: 0; bottom: 34px; z-index: 70;
+  border-top: 2px dashed #E31C3D; pointer-events: none;
+}
+.fold-line span {
+  position: absolute; right: 8px; top: -16px;
+  background: #E31C3D; color: #fff;
+  font-size: 9px; font-weight: 700; letter-spacing: .06em;
+  padding: 2px 6px; border-radius: 2px;
+}
+
+/* Desktop preview: real 2-col canvas, not a scaled phone */
+body.lab-desktop { background: var(--color-surface); }
+body.lab-desktop .lab-stage { background: var(--color-surface); padding: 0; min-height: calc(100vh - 52px); }
+body.lab-desktop .phone-frame {
+  width: 100%; height: auto; min-height: calc(100vh - 52px);
+  border: 0; border-radius: 0; margin: 0; box-shadow: none; overflow: visible;
+}
+body.lab-desktop .phone-safe-top,
+body.lab-desktop .phone-safe-bottom,
+body.lab-desktop .fold-line { display: none; }
+body.lab-desktop .phone-screen {
+  position: relative; inset: auto; padding: 0; overflow: visible;
+}
+
+/* Fold screens: drop global chrome so Results/Book fit 390×844 */
+body.lab-mobile.lab-fold .usa-banner,
+body.lab-mobile.lab-fold .site-header,
+body.lab-mobile.lab-fold .app-nav,
+body.lab-mobile.lab-fold .footer { display: none; }
+body.lab-mobile.lab-fold .wrap { padding: 8px 12px 12px; max-width: none; }
+body.lab-mobile.lab-fold .sticky-cta { margin-left: -12px; margin-right: -12px; }
+
+.fold-head {
+  display: flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 4px;
+}
+.fold-head .back-link { min-width: 44px; padding: 0 4px; }
+.fold-head h1 { font-size: 1.25rem; letter-spacing: -.02em; margin: 0; line-height: 1.2; }
+.context-line {
+  margin: 0 0 8px; font-size: 1rem; color: var(--color-gray-darker);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+body.lab-mobile .trust-bar {
+  position: sticky; top: 0; padding: 6px 0; margin-bottom: 8px;
+  border: 0; border-radius: 0; box-shadow: none; background: var(--color-surface);
+}
+body.lab-mobile .trust-bar__title,
+body.lab-mobile #results-lede,
+body.lab-mobile #view-results .step-crumb,
+body.lab-mobile #view-results .summary-panel,
+body.lab-mobile #show-more-options { display: none; }
+body.lab-mobile.lab-fold #show-more-below { display: block; margin-top: 16px; }
+#show-more-below { display: none; }
+body.lab-mobile .trust-chips { flex-wrap: nowrap; gap: 6px; }
+body.lab-mobile .chip--trust {
+  flex: 1; justify-content: center; text-align: center;
+  min-height: 44px; padding: 6px 4px; font-size: 12px; line-height: 1.2;
+  background: var(--color-primary); border-color: var(--color-primary); color: var(--color-white);
+}
+body.lab-mobile .chip--trust.is-off {
+  background: var(--color-warn-lightest); border-color: var(--color-warn-outline); color: var(--color-warn-outline);
+}
+body.lab-mobile .chip--trust.is-locked::after { content: none; }
+
+.card.provider-card {
+  padding: 12px; margin-bottom: 10px;
+}
+.provider-card__name { margin: 0; font-size: 1.25rem; font-weight: 600; letter-spacing: -.02em; }
+.provider-card__spec { margin: 2px 0 0; color: var(--color-gray-darker); font-size: 1.25rem; }
+.provider-card__meta { margin: 4px 0 0; font-size: 1rem; color: var(--color-gray-darker); display: flex; flex-wrap: wrap; gap: 8px 12px; }
+.provider-card__reason { margin: 6px 0 0; font-size: 1rem; color: var(--color-primary-darker); font-weight: 600; }
+.provider-card .slots-row { margin-top: 8px; gap: 8px; }
+.provider-card .chip--slot {
+  min-height: 44px; min-width: 96px; background: var(--color-primary); border-color: var(--color-primary); color: #fff;
+}
+.provider-card .chip--slot .day,
+.provider-card .chip--slot .time { color: #fff; font-size: 1rem; }
+.provider-card .chip--slot.is-empty { background: var(--color-white); color: var(--color-gray-darker); border-style: dashed; }
+.provider-card .chip--slot.is-empty .day,
+.provider-card .chip--slot.is-empty .time { color: var(--color-gray-darker); }
+
+/* Book (mobile fold) */
+.book-identity { margin-bottom: 8px; }
+.book-identity .provider__name { font-size: 1.25rem; }
+.book-loc { margin: 4px 0 8px; font-size: 1rem; color: var(--color-gray-darker); }
+body.lab-mobile #view-doctor .section-kicker,
+body.lab-mobile #view-doctor #doctor-slots-help,
+body.lab-mobile #view-doctor #new-patient-note,
+body.lab-mobile #view-doctor #telehealth-note,
+body.lab-mobile #view-doctor .step-crumb { display: none; }
+body.lab-mobile #view-doctor .segmented { margin: 8px 0 10px; }
+.book-day-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; margin: 0 0 8px;
+}
+.book-day-row h2 { margin: 0; font-size: 1.25rem; }
+.time-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.time-chip {
+  min-height: 44px; padding: 8px 6px; border-radius: var(--radius);
+  border: 2px solid var(--color-primary); background: var(--color-primary); color: var(--color-white);
+  font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+}
+.time-chip.is-selected { background: var(--color-primary-darkest); border-color: var(--color-primary-darkest); }
+.time-chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.book-empty {
+  padding: 12px; border: 1px solid var(--color-gray-light); border-radius: var(--radius);
+  background: var(--color-white);
+}
+.book-empty p { margin: 0 0 8px; }
+.sticky-cta[hidden] { display: none !important; }
+
+body.lab-mobile .sheet-scrim,
+body.lab-mobile .filter-sheet {
+  position: absolute;
+}
+body.lab-mobile .filter-sheet { left: 0; right: 0; bottom: 34px; }
+
+/* Desktop: list | detail (not scaled mobile) */
+body.lab-desktop .results-layout {
+  display: grid; grid-template-columns: minmax(360px, 1fr) minmax(360px, 1fr); gap: 24px; align-items: start;
+}
+body.lab-desktop .summary-panel { display: none; }
+body.lab-desktop #results-detail { display: block; }
+#results-detail { display: none; }
+body.lab-desktop #view-doctor .book-split {
+  display: grid; grid-template-columns: minmax(280px, 340px) 1fr; gap: 24px; align-items: start;
+}
+body.lab-desktop #doctor-list { display: block; }
+#doctor-list { display: none; }
+body.lab-desktop #show-more-options { display: inline-flex; }
+body.lab-desktop .trust-bar__title { display: none; }
+body.lab-desktop .chip--trust.is-locked {
+  background: var(--color-primary); border-color: var(--color-primary); color: var(--color-white);
+}
+body.lab-desktop .chip--trust.is-locked::after { content: none; }
+body.lab-desktop .fold-head h1 { font-size: 2rem; }
+body.lab-desktop #results-lede { display: none; }
 </style>
 </head>
-<body>
+<body class="lab-mobile">
 <a class="skip-link" href="#main">Skip to main content</a>
+
+<div class="lab-bar" role="region" aria-label="Design Lab preview">
+  <span class="lab-bar__brand">Design Lab · Stay Put</span>
+  <div class="lab-toggle" role="group" aria-label="Preview size">
+    <button type="button" id="lab-mobile" aria-pressed="true">Mobile</button>
+    <button type="button" id="lab-desktop" aria-pressed="false">Desktop</button>
+  </div>
+  <span class="lab-bar__hint" id="lab-hint">390×844 phone · red line = above the fold</span>
+</div>
+
+<div class="lab-stage">
+<div class="phone-frame" id="phone-frame">
+  <div class="phone-safe-top" aria-hidden="true"></div>
+  <div class="phone-screen" id="phone-screen">
 
 <div class="usa-banner" role="region" aria-label="Official government website">
   <div class="usa-banner__inner">
@@ -521,6 +714,9 @@ input.is-error { border-color: var(--color-error); }
           <button type="button" class="chip" id="demo-slot-taken">Slot taken</button>
           <button type="button" class="chip" id="demo-call">Clinic will call</button>
           <button type="button" class="chip" id="demo-tele">Telehealth only</button>
+          <button type="button" class="chip" id="demo-fold-results">Fold: Results</button>
+          <button type="button" class="chip" id="demo-fold-book">Fold: Book</button>
+          <button type="button" class="chip" id="demo-fold-empty">Fold: empty day</button>
           <button type="button" class="chip" id="demo-clear">Clear booking</button>
         </div>
       </details>
@@ -632,17 +828,18 @@ input.is-error { border-color: var(--color-error); }
     </section>
 
     <section class="view" id="view-results" aria-labelledby="results-title">
-      <button type="button" class="back-link" data-nav="need">← Change visit reason</button>
-      <p class="step-crumb">Providers</p>
-      <h1 id="results-title">Providers near you</h1>
+      <div class="fold-head">
+        <button type="button" class="back-link" data-nav="need" aria-label="Back to visit reason">←</button>
+        <h1 id="results-title">Providers</h1>
+      </div>
+      <p class="context-line" id="results-context"></p>
       <p class="lede" id="results-lede"></p>
-      <div id="results-redflag" hidden></div>
 
       <div class="trust-bar" role="region" aria-label="Search defaults">
-        <p class="trust-bar__title">Trust defaults are on — turn off only if you understand the tradeoff</p>
+        <p class="trust-bar__title">Trust defaults</p>
         <div class="trust-chips" id="trust-chips">
           <button type="button" class="chip chip--trust is-locked" data-trust="plan" aria-pressed="true" disabled>In your plan</button>
-          <button type="button" class="chip chip--trust is-locked" data-trust="accepting" aria-pressed="true" disabled>Accepting new patients</button>
+          <button type="button" class="chip chip--trust is-locked" data-trust="accepting" aria-pressed="true" disabled>Accepting</button>
           <button type="button" class="chip chip--trust is-locked" data-trust="near" aria-pressed="true" disabled>Near you</button>
         </div>
         <button type="button" class="btn btn--ghost btn--sm" id="show-more-options" aria-expanded="false" style="margin-top:8px">Show more options</button>
@@ -652,36 +849,44 @@ input.is-error { border-color: var(--color-error); }
         <div>
           <div id="results-list"></div>
           <div id="results-empty" hidden></div>
+          <div id="results-redflag" hidden></div>
+          <button type="button" class="btn btn--ghost btn--sm" id="show-more-below">Show more options</button>
         </div>
-        <aside class="summary-panel card" aria-label="Search summary">
-          <h2>Your search</h2>
-          <p id="side-summary"></p>
-          <div class="map-placeholder" role="img" aria-label="Map placeholder. Addresses are on each card — this prototype is not map-only.">
-            Map placeholder<br /><span style="font-weight:500;font-size:1rem">Addresses on cards · not map-only</span>
-          </div>
+        <aside class="card" id="results-detail" aria-label="Provider detail">
+          <p class="muted" id="side-summary">Select a time on a card to book. No map on this screen.</p>
+          <div id="results-detail-body"></div>
         </aside>
       </div>
     </section>
 
     <section class="view" id="view-doctor" aria-labelledby="doctor-title">
-      <button type="button" class="back-link" data-nav="results">← All providers</button>
-      <p class="step-crumb">Select appointment</p>
-      <div id="doctor-hero"></div>
-      <h2 class="slots-label" style="font-size:1.25rem;margin-top:20px">Select a date and time</h2>
-      <p class="muted" id="doctor-slots-help">New vs existing changes which openings we show. Results were already filtered for accepting when that default is on.</p>
-      <p class="section-kicker">Patient type</p>
-      <div class="segmented" role="group" aria-label="New or existing patient">
-        <button type="button" id="pt-new" aria-pressed="true">I’m a new patient</button>
-        <button type="button" id="pt-existing" aria-pressed="false">I’m an existing patient</button>
-      </div>
-      <div id="doctor-days"></div>
-      <div class="slots-row" id="doctor-slots" style="margin:12px 0 8px"></div>
-      <p id="new-patient-note" class="card card--success" style="margin-top:16px"></p>
-      <div id="telehealth-note" class="card card--info" hidden>
-        <strong>Telehealth only for these openings.</strong> You’ll get a join link the day of the visit. No in-person slots this week.
-      </div>
-      <div class="sticky-cta">
-        <button type="button" class="btn btn--primary btn--block" id="doctor-continue" disabled>Review appointment</button>
+      <div class="book-split">
+        <div id="doctor-list" aria-label="Other providers"></div>
+        <div>
+          <div class="fold-head">
+            <button type="button" class="back-link" data-nav="results" aria-label="Back to providers">←</button>
+            <h1 id="doctor-title">Book</h1>
+          </div>
+          <div class="book-identity" id="doctor-hero"></div>
+          <div class="segmented" role="group" aria-label="New or existing patient">
+            <button type="button" id="pt-new" aria-pressed="true">I’m a new patient</button>
+            <button type="button" id="pt-existing" aria-pressed="false">I’m an existing patient</button>
+          </div>
+          <p class="muted" id="doctor-slots-help">New vs existing changes openings. Accepting was already filtered when that default is on.</p>
+          <div class="book-day-row">
+            <h2 id="book-day-label">Select a day</h2>
+            <button type="button" class="btn btn--ghost btn--sm" id="book-next-day">Show next day</button>
+          </div>
+          <div id="doctor-days" hidden></div>
+          <div id="doctor-slots" class="time-grid"></div>
+          <p id="new-patient-note" class="card card--success" hidden></p>
+          <div id="telehealth-note" class="card card--info" hidden>
+            <strong>Telehealth only for these openings.</strong> You’ll get a join link the day of the visit.
+          </div>
+          <div class="sticky-cta" id="doctor-sticky" hidden>
+            <button type="button" class="btn btn--primary btn--block" id="doctor-continue">Continue</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -741,6 +946,12 @@ input.is-error { border-color: var(--color-error); }
   <p><strong>Prototype only.</strong> Not affiliated with live Medicare.gov booking. Medicare Green UI system. No network required (Inter font loads if available).</p>
 </footer>
 
+  </div>
+  <div class="fold-line" id="fold-line" aria-hidden="true"><span>ABOVE THE FOLD</span></div>
+  <div class="phone-safe-bottom" aria-hidden="true"></div>
+</div>
+</div>
+
 <script>
 (function () {
   'use strict';
@@ -785,9 +996,9 @@ input.is-error { border-color: var(--color-error); }
       address: '1200 Market St, Suite 200', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['10:30 AM', '2:00 PM'], ['9:00 AM', '10:30 AM', '2:00 PM']],
-        ['fri', 'Fri', 'Sep 11', ['11:00 AM'], ['11:00 AM', '3:30 PM']],
-        ['mon', 'Mon', 'Sep 14', ['9:30 AM', '4:00 PM'], ['9:30 AM', '1:00 PM', '4:00 PM']],
+        ['thu', 'Thu', 'Sep 10', ['9:00 AM', '9:30 AM', '10:30 AM', '11:00 AM', '2:00 PM', '3:30 PM'], ['8:30 AM', '9:00 AM', '9:30 AM', '10:30 AM', '11:00 AM', '2:00 PM', '3:30 PM']],
+        ['fri', 'Fri', 'Sep 11', ['11:00 AM', '11:30 AM', '1:00 PM', '2:00 PM', '3:00 PM', '3:30 PM'], ['11:00 AM', '11:30 AM', '1:00 PM', '2:00 PM', '3:00 PM', '3:30 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:30 AM', '10:00 AM', '1:00 PM', '1:30 PM', '4:00 PM', '4:30 PM'], ['9:30 AM', '10:00 AM', '1:00 PM', '1:30 PM', '4:00 PM', '4:30 PM']],
         ['tue', 'Tue', 'Sep 15', [], []]
       ])
     },
@@ -797,10 +1008,10 @@ input.is-error { border-color: var(--color-error); }
       address: '88 Cardiac Way', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['fri', 'Fri', 'Sep 11', ['1:15 PM'], ['8:30 AM', '1:15 PM']],
-        ['mon', 'Mon', 'Sep 14', ['10:00 AM', '3:30 PM'], ['10:00 AM', '2:45 PM', '3:30 PM']],
-        ['wed', 'Wed', 'Sep 16', ['9:00 AM'], ['9:00 AM']],
-        ['thu', 'Thu', 'Sep 17', ['4:15 PM'], ['11:30 AM', '4:15 PM']]
+        ['fri', 'Fri', 'Sep 11', ['8:30 AM', '9:15 AM', '10:00 AM', '1:15 PM', '2:45 PM', '3:30 PM'], ['8:30 AM', '9:15 AM', '10:00 AM', '1:15 PM', '2:45 PM', '3:30 PM']],
+        ['mon', 'Mon', 'Sep 14', ['10:00 AM', '10:45 AM', '2:00 PM', '2:45 PM', '3:30 PM', '4:15 PM'], ['10:00 AM', '10:45 AM', '2:00 PM', '2:45 PM', '3:30 PM', '4:15 PM']],
+        ['wed', 'Wed', 'Sep 16', ['9:00 AM', '9:45 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM'], ['9:00 AM', '9:45 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM']],
+        ['thu', 'Thu', 'Sep 17', [], []]
       ])
     },
     {
@@ -809,9 +1020,9 @@ input.is-error { border-color: var(--color-error); }
       address: '450 Ortho Plaza', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['2:30 PM'], ['2:30 PM']],
-        ['sat', 'Sat', 'Sep 12', ['9:00 AM'], ['9:00 AM', '10:00 AM']],
-        ['tue', 'Tue', 'Sep 15', ['8:00 AM', '3:00 PM'], ['8:00 AM', '12:00 PM', '3:00 PM']],
+        ['thu', 'Thu', 'Sep 10', ['8:00 AM', '9:00 AM', '10:00 AM', '12:00 PM', '2:30 PM', '3:00 PM'], ['8:00 AM', '9:00 AM', '10:00 AM', '12:00 PM', '2:30 PM', '3:00 PM']],
+        ['sat', 'Sat', 'Sep 12', ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'], ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']],
+        ['tue', 'Tue', 'Sep 15', ['8:00 AM', '9:00 AM', '12:00 PM', '1:00 PM', '3:00 PM', '4:00 PM'], ['8:00 AM', '9:00 AM', '12:00 PM', '1:00 PM', '3:00 PM', '4:00 PM']],
         ['wed', 'Wed', 'Sep 16', [], []]
       ])
     },
@@ -821,10 +1032,10 @@ input.is-error { border-color: var(--color-error); }
       address: '17 Wellness Ave', city: 'Your city',
       tele: true, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['fri', 'Fri', 'Sep 11', ['12:00 PM', '1:00 PM'], ['12:00 PM', '12:30 PM', '1:00 PM']],
-        ['mon', 'Mon', 'Sep 14', ['9:00 AM'], ['9:00 AM', '9:30 AM']],
-        ['tue', 'Tue', 'Sep 15', ['4:00 PM'], ['4:00 PM', '4:30 PM']],
-        ['wed', 'Wed', 'Sep 16', ['10:15 AM'], ['10:15 AM']]
+        ['fri', 'Fri', 'Sep 11', ['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM'], ['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'], ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']],
+        ['tue', 'Tue', 'Sep 15', ['2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'], ['2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM']],
+        ['wed', 'Wed', 'Sep 16', [], []]
       ])
     },
     {
@@ -833,10 +1044,10 @@ input.is-error { border-color: var(--color-error); }
       address: '900 Vision Center', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['8:00 AM'], ['8:00 AM', '11:00 AM']],
+        ['thu', 'Thu', 'Sep 10', ['8:00 AM', '8:30 AM', '9:00 AM', '10:00 AM', '11:00 AM', '1:30 PM'], ['8:00 AM', '8:30 AM', '9:00 AM', '10:00 AM', '11:00 AM', '1:30 PM']],
         ['fri', 'Fri', 'Sep 11', [], []],
-        ['mon', 'Mon', 'Sep 14', ['1:30 PM'], ['1:30 PM', '3:00 PM']],
-        ['tue', 'Tue', 'Sep 15', ['10:00 AM'], ['10:00 AM']]
+        ['mon', 'Mon', 'Sep 14', ['1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM'], ['1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM'], ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM']]
       ])
     },
     {
@@ -845,9 +1056,9 @@ input.is-error { border-color: var(--color-error); }
       address: '33 Ear & Hearing Ln', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['wed', 'Wed', 'Sep 16', ['9:45 AM'], ['9:45 AM', '2:00 PM']],
-        ['thu', 'Thu', 'Sep 17', ['11:00 AM', '3:15 PM'], ['11:00 AM', '1:00 PM', '3:15 PM']],
-        ['fri', 'Fri', 'Sep 18', ['8:30 AM'], ['8:30 AM']],
+        ['wed', 'Wed', 'Sep 16', ['9:45 AM', '10:15 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:15 PM'], ['9:45 AM', '10:15 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:15 PM']],
+        ['thu', 'Thu', 'Sep 17', ['11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM', '3:15 PM', '3:45 PM'], ['11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM', '3:15 PM', '3:45 PM']],
+        ['fri', 'Fri', 'Sep 18', ['8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM'], ['8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM']],
         ['mon', 'Mon', 'Sep 21', [], []]
       ])
     },
@@ -857,9 +1068,9 @@ input.is-error { border-color: var(--color-error); }
       address: '41 Care Circle', city: 'Your city',
       tele: true, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['1:00 PM'], ['10:00 AM', '1:00 PM']],
-        ['fri', 'Fri', 'Sep 11', ['3:00 PM'], ['3:00 PM', '4:00 PM']],
-        ['mon', 'Mon', 'Sep 14', ['9:00 AM', '11:00 AM'], ['9:00 AM', '11:00 AM', '2:00 PM']],
+        ['thu', 'Thu', 'Sep 10', ['10:00 AM', '10:30 AM', '11:00 AM', '1:00 PM', '1:30 PM', '2:00 PM'], ['10:00 AM', '10:30 AM', '11:00 AM', '1:00 PM', '1:30 PM', '2:00 PM']],
+        ['fri', 'Fri', 'Sep 11', ['3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM'], ['3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM']],
+        ['mon', 'Mon', 'Sep 14', ['9:00 AM', '9:30 AM', '11:00 AM', '11:30 AM', '2:00 PM', '2:30 PM'], ['9:00 AM', '9:30 AM', '11:00 AM', '11:30 AM', '2:00 PM', '2:30 PM']],
         ['wed', 'Wed', 'Sep 16', [], ['1:30 PM']]
       ])
     },
@@ -869,9 +1080,9 @@ input.is-error { border-color: var(--color-error); }
       address: '210 Breathwell Pkwy', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['fri', 'Fri', 'Sep 11', ['8:45 AM'], ['8:45 AM', '2:15 PM']],
-        ['tue', 'Tue', 'Sep 15', ['10:00 AM'], ['10:00 AM', '1:00 PM']],
-        ['wed', 'Wed', 'Sep 16', ['3:30 PM'], ['3:30 PM']],
+        ['fri', 'Fri', 'Sep 11', ['8:45 AM', '9:15 AM', '10:00 AM', '11:00 AM', '2:15 PM', '3:00 PM'], ['8:45 AM', '9:15 AM', '10:00 AM', '11:00 AM', '2:15 PM', '3:00 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:00 AM', '10:30 AM', '11:00 AM', '1:00 PM', '1:30 PM', '2:00 PM'], ['10:00 AM', '10:30 AM', '11:00 AM', '1:00 PM', '1:30 PM', '2:00 PM']],
+        ['wed', 'Wed', 'Sep 16', ['3:30 PM', '3:45 PM', '4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM'], ['3:30 PM', '3:45 PM', '4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM']],
         ['thu', 'Thu', 'Sep 17', [], []]
       ])
     },
@@ -881,9 +1092,9 @@ input.is-error { border-color: var(--color-error); }
       address: '55 Women’s Health Blvd', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['9:15 AM'], ['9:15 AM', '11:45 AM']],
-        ['mon', 'Mon', 'Sep 14', ['2:00 PM'], ['8:30 AM', '2:00 PM']],
-        ['tue', 'Tue', 'Sep 15', ['10:30 AM'], ['10:30 AM']],
+        ['thu', 'Thu', 'Sep 10', ['9:15 AM', '9:45 AM', '10:15 AM', '11:45 AM', '1:15 PM', '2:15 PM'], ['9:15 AM', '9:45 AM', '10:15 AM', '11:45 AM', '1:15 PM', '2:15 PM']],
+        ['mon', 'Mon', 'Sep 14', ['8:30 AM', '9:00 AM', '10:00 AM', '2:00 PM', '2:30 PM', '3:00 PM'], ['8:30 AM', '9:00 AM', '10:00 AM', '2:00 PM', '2:30 PM', '3:00 PM']],
+        ['tue', 'Tue', 'Sep 15', ['10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM', '2:00 PM'], ['10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM', '2:00 PM']],
         ['fri', 'Fri', 'Sep 18', [], ['1:00 PM']]
       ])
     },
@@ -893,9 +1104,9 @@ input.is-error { border-color: var(--color-error); }
       address: '18 Digestive Ctr', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['mon', 'Mon', 'Sep 14', ['8:00 AM'], ['8:00 AM', '10:00 AM']],
-        ['wed', 'Wed', 'Sep 16', ['1:45 PM'], ['1:45 PM', '3:15 PM']],
-        ['thu', 'Thu', 'Sep 17', ['9:00 AM'], ['9:00 AM']],
+        ['mon', 'Mon', 'Sep 14', ['8:00 AM', '8:30 AM', '9:00 AM', '10:00 AM', '10:30 AM', '11:00 AM'], ['8:00 AM', '8:30 AM', '9:00 AM', '10:00 AM', '10:30 AM', '11:00 AM']],
+        ['wed', 'Wed', 'Sep 16', ['1:45 PM', '2:15 PM', '2:45 PM', '3:15 PM', '3:45 PM', '4:15 PM'], ['1:45 PM', '2:15 PM', '2:45 PM', '3:15 PM', '3:45 PM', '4:15 PM']],
+        ['thu', 'Thu', 'Sep 17', ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'], ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']],
         ['fri', 'Fri', 'Sep 18', [], []]
       ])
     },
@@ -905,9 +1116,9 @@ input.is-error { border-color: var(--color-error); }
       address: '72 Screening Way', city: 'Your city',
       tele: false, accepting: true, inNetwork: true, acceptsAssignment: true,
       days: days([
-        ['fri', 'Fri', 'Sep 11', ['7:30 AM', '8:00 AM'], ['7:30 AM', '8:00 AM', '8:30 AM']],
-        ['mon', 'Mon', 'Sep 14', ['7:45 AM'], ['7:45 AM', '9:00 AM']],
-        ['wed', 'Wed', 'Sep 16', ['10:00 AM'], ['10:00 AM']],
+        ['fri', 'Fri', 'Sep 11', ['7:30 AM', '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM'], ['7:30 AM', '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM']],
+        ['mon', 'Mon', 'Sep 14', ['7:45 AM', '8:15 AM', '8:45 AM', '9:00 AM', '9:30 AM', '10:00 AM'], ['7:45 AM', '8:15 AM', '8:45 AM', '9:00 AM', '9:30 AM', '10:00 AM']],
+        ['wed', 'Wed', 'Sep 16', ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM'], ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '1:00 PM', '1:30 PM']],
         ['thu', 'Thu', 'Sep 17', [], []]
       ])
     },
@@ -917,9 +1128,9 @@ input.is-error { border-color: var(--color-error); }
       address: '9 Assignment Ave', city: 'Your city',
       tele: false, accepting: true, inNetwork: false, acceptsAssignment: true,
       days: days([
-        ['thu', 'Thu', 'Sep 10', ['1:00 PM'], ['1:00 PM', '2:30 PM']],
-        ['tue', 'Tue', 'Sep 15', ['9:00 AM'], ['9:00 AM', '11:00 AM']],
-        ['wed', 'Wed', 'Sep 16', ['4:00 PM'], ['4:00 PM']],
+        ['thu', 'Thu', 'Sep 10', ['1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM'], ['1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM']],
+        ['tue', 'Tue', 'Sep 15', ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'], ['9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM']],
+        ['wed', 'Wed', 'Sep 16', ['4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM', '5:00 PM', '5:15 PM'], ['4:00 PM', '4:15 PM', '4:30 PM', '4:45 PM', '5:00 PM', '5:15 PM']],
         ['fri', 'Fri', 'Sep 18', [], []]
       ])
     },
@@ -1082,6 +1293,9 @@ input.is-error { border-color: var(--color-error); }
       'slot-taken': 'Time unavailable', appointments: 'My appointments'
     };
     announce((titles[name] || name) + ' screen');
+    document.body.classList.toggle('lab-fold', name === 'results' || name === 'doctor');
+    var screen = $('#phone-screen');
+    if (screen) screen.scrollTop = 0;
     window.scrollTo(0, 0);
     location.hash = name;
     render(name);
@@ -1193,10 +1407,33 @@ input.is-error { border-color: var(--color-error); }
     }
   }
 
+  function visitReasonLabel() {
+    if (state.condition && state.condition.id === 'else' && state.otherNeed) return state.otherNeed;
+    return state.condition ? state.condition.label : 'your care need';
+  }
+
+  function firstLiveSlots(p, limit) {
+    var out = [];
+    (p.days || []).forEach(function (d) {
+      daySlots(d).forEach(function (t) {
+        if (out.length < limit) out.push({ day: d, time: t });
+      });
+    });
+    return out;
+  }
+
+  function contextLine() {
+    var spec = state.condition ? state.condition.specialty : 'Care';
+    var plan = state.trust.plan
+      ? (state.coverage === 'original' ? 'Accepts assignment' : 'In your plan')
+      : 'Plan filter off';
+    var acc = state.trust.accepting ? 'Accepting' : 'Accepting off';
+    return spec + ' · ' + plan + ' · ' + acc;
+  }
+
   function renderResults() {
     var list = filteredProviders();
-    var cond = state.condition ? state.condition.label : 'your care need';
-    if (state.condition && state.condition.id === 'else' && state.otherNeed) cond = state.otherNeed;
+    var cond = visitReasonLabel();
     var spec = state.condition ? state.condition.specialty : 'care';
     var chronicTxt = state.chronic.length
       ? ' Also living with: ' + state.chronic.map(function (id) {
@@ -1204,11 +1441,12 @@ input.is-error { border-color: var(--color-error); }
           return c ? c.label : id;
         }).join(', ') + '.'
       : '';
-    $('#results-lede').textContent = 'For “' + cond + '” → ' + spec + '. ZIP ' + (state.zip || '—') + '.' + chronicTxt + ' Ratings are on cards only — not a filter.';
+    $('#results-context').textContent = contextLine();
+    $('#results-lede').textContent = 'For “' + cond + '” → ' + spec + '. ZIP ' + (state.zip || '—') + '.' + chronicTxt;
     $('#side-summary').innerHTML = '<strong>' + escapeHtml(cond) + '</strong><br/>Specialty: ' + escapeHtml(spec) +
       '<br/>Coverage: ' + escapeHtml(coverageLabel()) +
       '<br/>ZIP: ' + escapeHtml(state.zip || '—') +
-      '<br/>Defaults: in your plan, accepting, near you';
+      '<br/>Pick a time on a card. No map.';
     renderRedflag('#results-redflag');
 
     $$('#trust-chips .chip').forEach(function (chip) {
@@ -1248,123 +1486,100 @@ input.is-error { border-color: var(--color-error); }
     }
     empty.hidden = true;
     empty.innerHTML = '';
-    resultsList.innerHTML = list.map(providerCardHtml).join('');
+    resultsList.innerHTML = list.map(function (p, i) { return providerCardHtml(p, i); }).join('');
+    renderResultsDetail(list[0]);
   }
 
-  function providerCardHtml(p) {
-    var slots = p.days.map(function (d) {
-      var n = daySlots(d).length;
-      if (!n) {
-        return '<button type="button" class="chip chip--slot is-empty" disabled aria-label="' + d.label + ' ' + d.date + ': no openings"><span class="day">' + d.label + '</span><span class="time">None</span></button>';
-      }
-      return '<button type="button" class="chip chip--slot" data-open-provider="' + p.id + '" data-day="' + d.key + '" aria-label="' + d.label + ' ' + d.date + ', ' + n + ' openings"><span class="day">' + d.label + ' · ' + n + '</span><span class="time">' + daySlots(d)[0] + '</span></button>';
-    }).join('');
-    var tele = (p.tele || state.forceTele) ? '<span class="badge badge--info">Video available</span>' : '<span class="badge badge--info">In person</span>';
+  function providerCardHtml(p, index) {
+    var live = firstLiveSlots(p, 3);
+    var slots = live.length
+      ? live.map(function (s) {
+          return '<button type="button" class="chip chip--slot" data-open-provider="' + p.id + '" data-day="' + s.day.key + '" data-slot="' + s.time + '" aria-label="' + s.day.label + ' ' + s.time + '"><span class="day">' + s.day.label + '</span><span class="time">' + s.time + '</span></button>';
+        }).join('')
+      : '<button type="button" class="chip chip--slot is-empty" disabled><span class="day">Next</span><span class="time">None</span></button>';
     var rating = (p.rating != null)
-      ? '<span class="stars" aria-label="Rating ' + p.rating + ' out of 5">★ ' + p.rating + '</span><span class="muted">' + p.reviews + ' reviews</span>'
-      : '<span class="muted">No rating in this prototype</span>';
-    var planOn = inPlan(p);
-    var nearOn = p.miles <= 15;
+      ? '<span class="stars" aria-label="Rating ' + p.rating + ' out of 5">★ ' + p.rating + '</span>'
+      : '';
     return (
-      '<article class="card provider" data-provider-card="' + p.id + '">' +
-        '<div class="provider__top">' +
-          '<div class="avatar" aria-hidden="true">' + p.initials + '</div>' +
-          '<div class="provider__meta">' +
-            '<h2 class="provider__name">' + escapeHtml(p.name) + '</h2>' +
-            '<p class="provider__spec">' + escapeHtml(p.plain) + ' <span class="muted">(' + escapeHtml(p.specialty) + ')</span></p>' +
-            '<div class="provider__row">' + rating + '<span>' + p.miles + ' mi</span></div>' +
-            '<div class="badge-row">' +
-              '<span class="badge' + (planOn ? ' badge--plan' : ' badge--warn') + '">' + escapeHtml(planBadgeLabel(p)) + '</span>' +
-              '<span class="badge' + (p.accepting ? '' : ' badge--warn') + '">' + (p.accepting ? 'Accepting new patients' : 'Not accepting new patients') + '</span>' +
-              '<span class="badge' + (nearOn ? ' badge--info' : ' badge--warn') + '">' + (nearOn ? 'Near you' : 'Farther away') + '</span>' +
-              tele +
-            '</div>' +
-            '<p class="muted" style="margin:4px 0 0">' + escapeHtml(p.address) + '</p>' +
-          '</div>' +
+      '<article class="card provider-card" data-provider-card="' + p.id + '">' +
+        '<h2 class="provider-card__name">' + escapeHtml(p.name) + '</h2>' +
+        '<p class="provider-card__spec">' + escapeHtml(p.plain) + '</p>' +
+        '<div class="provider-card__meta">' +
+          '<span>' + p.miles + ' mi</span>' + rating +
         '</div>' +
-        '<div class="provider__actions">' +
-          '<button type="button" class="btn btn--primary" data-open-provider="' + p.id + '">Select appointment</button>' +
-          '<button type="button" class="btn btn--secondary" data-open-provider="' + p.id + '">Show details</button>' +
-        '</div>' +
-        '<div class="provider__slots">' +
-          '<p class="slots-label">Next openings</p>' +
-          '<div class="slots-row">' + slots + '</div>' +
-        '</div>' +
+        '<p class="provider-card__reason">' + escapeHtml(visitReasonLabel()) + '</p>' +
+        '<div class="slots-row">' + slots + '</div>' +
+        (index === 0 ? '' : '') +
       '</article>'
     );
+  }
+
+  function renderResultsDetail(p) {
+    var box = $('#results-detail-body');
+    if (!box) return;
+    if (!p) { box.innerHTML = ''; return; }
+    box.innerHTML = providerCardHtml(p, 0) +
+      '<p class="muted" style="margin-top:12px">Desktop detail. Tap a time to open Book. No map, bio, or insurance editor here.</p>';
   }
 
   function renderDoctor() {
     var p = getProvider(state.providerId);
     if (!p) { showView('results'); return; }
     var teleOn = p.tele || state.forceTele;
-    $('#telehealth-note').hidden = !teleOn;
-    var rating = (p.rating != null)
-      ? '<div class="provider__row"><span class="stars" aria-label="Rating ' + p.rating + ' out of 5">★ ' + p.rating + '</span><span class="muted">' + p.reviews + ' reviews</span></div>'
-      : '';
+    $('#telehealth-note').hidden = true;
+    $('#new-patient-note').hidden = true;
+
     $('#doctor-hero').innerHTML =
-      '<div class="card provider">' +
-        '<div class="provider__top">' +
-          '<div class="avatar" aria-hidden="true">' + p.initials + '</div>' +
-          '<div class="provider__meta">' +
-            '<h1 id="doctor-title" class="provider__name" style="font-size:1.75rem">' + escapeHtml(p.name) + '</h1>' +
-            '<p class="provider__spec">' + escapeHtml(p.plain) + ' · ' + p.miles + ' mi</p>' +
-            rating +
-            '<div class="badge-row">' +
-              '<span class="badge' + (inPlan(p) ? ' badge--plan' : ' badge--warn') + '">' + escapeHtml(planBadgeLabel(p)) + '</span>' +
-              '<span class="badge' + (p.accepting ? '' : ' badge--warn') + '">' + (p.accepting ? 'Accepting new patients' : 'Not accepting new patients') + '</span>' +
-              (teleOn ? '<span class="badge badge--info">Telehealth</span>' : '<span class="badge badge--info">In person</span>') +
-            '</div>' +
-            '<p class="muted">' + escapeHtml(p.address) + ', ' + escapeHtml(p.city) + '</p>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+      '<p class="provider-card__name" id="doctor-name">' + escapeHtml(p.name) + '</p>' +
+      '<p class="provider-card__spec">' + escapeHtml(p.plain) + '</p>' +
+      '<p class="book-loc">' + escapeHtml(p.address.split(',')[0]) + ' · ' + p.miles + ' mi' + (teleOn ? ' · Video' : '') + '</p>';
 
     $('#pt-new').setAttribute('aria-pressed', state.patientType === 'new' ? 'true' : 'false');
     $('#pt-existing').setAttribute('aria-pressed', state.patientType === 'existing' ? 'true' : 'false');
 
-    var note = $('#new-patient-note');
-    if (state.patientType === 'new' && p.accepting) {
-      note.hidden = false;
-      note.innerHTML = '<strong>Accepting new patients.</strong> You’re covered to book as a new patient with this clinic in the prototype.';
-    } else if (state.patientType === 'new' && !p.accepting) {
-      note.hidden = false;
-      note.className = 'card card--warn';
-      note.innerHTML = '<strong>Not accepting new patients.</strong> Existing-patient openings may still appear. This clinic showed up because you turned off that default.';
-    } else {
-      note.hidden = false;
-      note.className = 'card card--info';
-      note.innerHTML = '<strong>Existing patient openings.</strong> These times assume the clinic already has your chart.';
-    }
-    if (state.patientType === 'new' && p.accepting) note.className = 'card card--success';
-
-    $('#doctor-days').innerHTML = '<div class="slots-row" role="tablist" aria-label="Days">' + p.days.map(function (d) {
-      var selected = state.dayKey === d.key;
-      var empty = !daySlots(d).length;
-      return '<button type="button" role="tab" class="chip chip--slot chip--hero' + (selected ? ' is-selected' : '') + (empty ? ' is-empty' : '') + '" data-day-pick="' + d.key + '" ' + (empty ? 'disabled' : '') + ' aria-selected="' + selected + '" aria-label="' + d.label + ' ' + d.date + (empty ? ', no openings' : ', ' + daySlots(d).length + ' openings') + '"><span class="day">' + d.label + ' ' + d.date + '</span><span class="time">' + (empty ? 'No times' : daySlots(d).length + ' open') + '</span></button>';
-    }).join('') + '</div>';
-
-    if (!state.dayKey || !p.days.some(function (d) { return d.key === state.dayKey && daySlots(d).length; })) {
-      var first = p.days.find(function (d) { return daySlots(d).length; });
+    if (!state.dayKey) {
+      var first = p.days.find(function (d) { return daySlots(d).length; }) || p.days[0];
       state.dayKey = first ? first.key : null;
-      if (!first) state.slot = null;
     }
     var day = p.days.find(function (d) { return d.key === state.dayKey; }) || p.days[0];
+    $('#book-day-label').textContent = day ? (day.label + ', ' + day.date) : 'No days';
+
     var slotsEl = $('#doctor-slots');
     var open = daySlots(day);
     if (!day || !open.length) {
-      slotsEl.innerHTML = '<p class="card card--warn" style="margin:0"><strong>No openings this day.</strong> Pick another day above — we don’t hide empty days.</p>';
+      slotsEl.className = '';
+      slotsEl.innerHTML = '<div class="book-empty"><p><strong>No times</strong> this day.</p></div>';
     } else {
-      slotsEl.innerHTML = open.map(function (t) {
+      slotsEl.className = 'time-grid';
+      var shown = open.slice(0, 6);
+      slotsEl.innerHTML = shown.map(function (t) {
         var sel = state.slot === t && state.dayKey === day.key;
-        return '<button type="button" class="chip chip--slot chip--hero' + (sel ? ' is-selected' : '') + '" data-slot-pick="' + t + '" aria-pressed="' + sel + '"><span class="day">' + day.label + '</span><span class="time">' + t + '</span></button>';
+        return '<button type="button" class="time-chip' + (sel ? ' is-selected' : '') + '" data-slot-pick="' + t + '" aria-pressed="' + sel + '">' + t + '</button>';
       }).join('');
     }
-    $$('[data-day-pick]').forEach(function (btn) {
-      btn.classList.toggle('is-selected', btn.getAttribute('data-day-pick') === state.dayKey);
-      btn.setAttribute('aria-selected', btn.getAttribute('data-day-pick') === state.dayKey ? 'true' : 'false');
-    });
-    $('#doctor-continue').disabled = !(state.dayKey && state.slot);
+
+    var sticky = $('#doctor-sticky');
+    var canContinue = !!(state.dayKey && state.slot && open.indexOf(state.slot) !== -1);
+    if (!canContinue) state.slot = (state.slot && open.indexOf(state.slot) !== -1) ? state.slot : null;
+    canContinue = !!(state.dayKey && state.slot);
+    sticky.hidden = !canContinue;
+    $('#doctor-continue').disabled = !canContinue;
+
+    var listBox = $('#doctor-list');
+    if (listBox) {
+      listBox.innerHTML = '<p class="section-kicker">Providers</p>' +
+        filteredProviders().map(function (x, i) { return providerCardHtml(x, i); }).join('');
+    }
+  }
+
+  function showNextBookDay() {
+    var p = getProvider(state.providerId);
+    if (!p) return;
+    var idx = p.days.findIndex(function (d) { return d.key === state.dayKey; });
+    var next = p.days[idx + 1] || p.days[0];
+    state.dayKey = next.key;
+    state.slot = null;
+    renderDoctor();
   }
 
   function renderReview() {
@@ -1580,8 +1795,8 @@ input.is-error { border-color: var(--color-error); }
     if (openP) {
       state.providerId = openP.getAttribute('data-open-provider');
       state.dayKey = openP.getAttribute('data-day') || null;
-      state.slot = null;
-      if (openP.getAttribute('data-day')) {
+      state.slot = openP.getAttribute('data-slot') || null;
+      if (state.dayKey && !state.slot) {
         var p = getProvider(state.providerId);
         var d = p && p.days.find(function (x) { return x.key === state.dayKey; });
         var open = d ? daySlots(d) : [];
@@ -1678,7 +1893,24 @@ input.is-error { border-color: var(--color-error); }
     renderDoctor();
   });
 
+  function setPreview(mode) {
+    var mobile = mode !== 'desktop';
+    document.body.classList.toggle('lab-mobile', mobile);
+    document.body.classList.toggle('lab-desktop', !mobile);
+    $('#lab-mobile').setAttribute('aria-pressed', mobile ? 'true' : 'false');
+    $('#lab-desktop').setAttribute('aria-pressed', mobile ? 'false' : 'true');
+    $('#lab-hint').textContent = mobile
+      ? '390×844 phone · red line = above the fold'
+      : 'Desktop 2-column · list | detail (not scaled mobile)';
+    try { localStorage.setItem('medicareLabPreview', mobile ? 'mobile' : 'desktop'); } catch (err) {}
+    var h = (location.hash || '#home').replace(/^#/, '') || 'home';
+    if (h === 'results' || h === 'doctor') render(h);
+  }
+  $('#lab-mobile').addEventListener('click', function () { setPreview('mobile'); });
+  $('#lab-desktop').addEventListener('click', function () { setPreview('desktop'); });
+  $('#book-next-day').addEventListener('click', showNextBookDay);
   $('#show-more-options').addEventListener('click', openFilterSheet);
+  $('#show-more-below').addEventListener('click', openFilterSheet);
   $('#filter-close').addEventListener('click', closeFilterSheet);
   $('#sheet-scrim').addEventListener('click', closeFilterSheet);
   $('#filter-apply').addEventListener('click', function () {
@@ -1738,6 +1970,26 @@ input.is-error { border-color: var(--color-error); }
     state.slot = null;
     showView('doctor');
   });
+  $('#demo-fold-results').addEventListener('click', function () {
+    seedHappyPath('wellness');
+    showView('results');
+  });
+  $('#demo-fold-book').addEventListener('click', function () {
+    seedHappyPath('wellness');
+    state.providerId = 'rivera';
+    state.dayKey = 'thu';
+    state.slot = null;
+    state.patientType = 'new';
+    showView('doctor');
+  });
+  $('#demo-fold-empty').addEventListener('click', function () {
+    seedHappyPath('wellness');
+    state.providerId = 'rivera';
+    state.dayKey = 'tue';
+    state.slot = null;
+    state.patientType = 'new';
+    showView('doctor');
+  });
   $('#demo-clear').addEventListener('click', function () {
     state.appointment = null;
     state.forceEmpty = false;
@@ -1755,6 +2007,11 @@ input.is-error { border-color: var(--color-error); }
     showView(allowed.indexOf(h) !== -1 ? h : 'home');
   }
   window.addEventListener('hashchange', fromHash);
+  var previewQ = '';
+  try { previewQ = new URLSearchParams(location.search).get('preview') || ''; } catch (err) {}
+  var savedPreview = '';
+  try { savedPreview = localStorage.getItem('medicareLabPreview') || ''; } catch (err) {}
+  setPreview(previewQ === 'desktop' || savedPreview === 'desktop' ? 'desktop' : 'mobile');
   fromHash();
 })();
 </script>

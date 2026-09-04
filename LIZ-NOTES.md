@@ -34,6 +34,7 @@
 - Inter + 20px body-large floor; 16px labels / button text.
 - Visit-reason chips (Medicare Zocdoc-style) + chronic refine group.
 - Trust defaults stay sticky; ratings stay on cards only.
+- Design Lab bar: **Mobile** = 390×844 + red fold line; **Desktop** = 2-col list | detail. Results/Book above-the-fold bake-in.
 
 ## Open threads
 - Zocdoc call on data reliability (in-network / accepting new patients).

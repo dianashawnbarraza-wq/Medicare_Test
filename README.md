@@ -16,6 +16,18 @@ python3 -m http.server 8765 --directory /workspace
 
 Hash routes work offline (`#home`, `#who`, `#need`, `#results`, …). Booking persists in `localStorage` so a refresh still shows the Home tile.
 
+## Design Lab preview (Mobile / Desktop)
+
+A **Design Lab** bar sits above the prototype:
+
+- **Mobile** (default) — 390×844 phone frame with safe area. A **red dashed line** labeled **ABOVE THE FOLD** is fixed at the bottom of the visible phone (above the home indicator). Results and Book are baked so the first doctor’s times and Continue sit above that line — no scroll required for the pass/fail.
+- **Desktop** — full-width **2-column** layout (list | detail), not a scaled-up phone.
+
+Toggle **Mobile / Desktop** in the dark bar at the top. The choice sticks in `localStorage`. Deep-link: `index.html?preview=desktop` or `?preview=mobile`.
+
+**Results pass/fail:** tap a time on doctor #1 without scrolling.  
+**Book pass/fail:** select a slot and see **Continue** without scrolling. Empty days show **No times** + **Show next day** above the fold. Continue is hidden until a time is selected so the slot grid keeps the pixels.
+
 ## Happy path (Stay Put)
 
 **Book for someone I help** is a **secondary outline CTA** on Home — Who stays a light first step.
@@ -53,7 +65,7 @@ Hash routes work offline (`#home`, `#who`, `#need`, `#results`, …). Booking pe
 
 ## Design system
 
-Medicare Green (`#146A5D` → `#0A352F`), secondary blue for pills/alerts, Inter, 20px body floor, 16px labels/buttons, 44px targets, 3px `#2A6FB8` focus rings, skip link, live region for view changes, reduced-motion respect, text badges. Mobile-first stack with full-width primary CTAs. Desktop from 960px: max-width about 1100px, list plus sticky map placeholder (not map-only). Filters stay chips + sheet — not a left rail as the only pattern.
+Medicare Green (`#146A5D` → `#0A352F`), secondary blue for pills/alerts, Inter, 20px body floor, 16px labels/buttons, 44px targets, 3px `#2A6FB8` focus rings, skip link, live region for view changes, reduced-motion respect, text badges. Mobile critique uses a 390×844 phone + fold line. Desktop preview is an intentional 2-column list | detail (no map on Results/Book). Filters stay chips + sheet below the fold — not a left rail.
 
 ## Files
 
