@@ -563,7 +563,7 @@ input.is-error { border-color: var(--color-error); }
   .choice { flex: 1; }
 }
 
-/* .  Design Lab critique chrome —— */
+/* Design Lab critique chrome */
 .lab-bar {
   position: sticky; top: 0; z-index: 200;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
@@ -1596,7 +1596,7 @@ body.lab-desktop #results-lede { display: none; }
     $('#results-lede').textContent = 'Showing ' + spec + ' near ' + (state.zip || 'your ZIP') + ' for “' + cond + '”.' + chronicTxt;
     $('#side-summary').innerHTML = '<strong>' + escapeHtml(cond) + '</strong><br/>Specialty: ' + escapeHtml(spec) +
       '<br/>Coverage: ' + escapeHtml(coverageLabel()) +
-      '<br/>ZIP: ' + escapeHtml(state.zip || '—') +
+      '<br/>ZIP: ' + escapeHtml(state.zip || 'your ZIP') +
       '<br/>Pick a time on a card. No map.';
     renderRedflag('#results-redflag');
 
@@ -1747,7 +1747,7 @@ body.lab-desktop #results-lede { display: none; }
           return c ? c.label : id;
         }).join(', ')
       : 'None selected';
-    var reason = state.condition ? state.condition.label : '—';
+    var reason = state.condition ? state.condition.label : 'your visit';
     if (state.condition && state.condition.id === 'else' && state.otherNeed) reason = state.otherNeed;
     $('#review-card').innerHTML =
       '<ul class="confirm-list">' +
