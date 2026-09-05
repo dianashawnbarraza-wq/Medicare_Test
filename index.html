@@ -212,7 +212,7 @@ a:hover { color: var(--color-primary-darker); }
 #view-who .lede { display: none; }
 #view-who .back-link { margin-bottom: 4px; }
 #view-who .who-dock {
-  position: sticky; bottom: 0; z-index: 80;
+  position: sticky; bottom: var(--proto-h); z-index: 80;
   margin: 16px -16px 0; padding: 0;
   background: var(--color-white);
 }
@@ -220,12 +220,52 @@ a:hover { color: var(--color-primary-darker); }
   margin: 0; border-top: 1px solid var(--color-gray-lighter);
   box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
 }
-.proto-banner {
+.proto-banner,
+.proto-footer {
   background: var(--color-primary-darkest); color: #fff;
   text-align: center; font-size: 12px; font-weight: 600;
   letter-spacing: .04em; text-transform: uppercase;
   padding: 8px 12px;
 }
+:root { --proto-h: 36px; --sticky-cta-pad: 72px; }
+.proto-footer {
+  position: sticky; bottom: 0; z-index: 95;
+  margin: 0; max-width: none; width: 100%;
+  box-sizing: border-box;
+}
+/* Primary CTAs sit above the one Prototype only bar */
+.sticky-cta,
+.who-dock,
+.home-dock {
+  bottom: var(--proto-h);
+}
+.home-dock {
+  position: sticky; z-index: 80;
+  margin: 16px -16px 0; padding: 0;
+  background: var(--color-white);
+}
+.home-dock .sticky-cta {
+  margin: 0; bottom: auto;
+  border-top: 1px solid var(--color-gray-lighter);
+  box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
+}
+body.lab-native .home-dock,
+body.lab-mobile .home-dock { margin-left: 0; margin-right: 0; }
+.more-below {
+  position: sticky; bottom: calc(var(--proto-h) + 56px); z-index: 70;
+  display: flex; justify-content: center; pointer-events: none;
+  margin: -40px 0 8px; opacity: 0; transition: opacity .2s ease;
+}
+.more-below.is-visible { opacity: 1; }
+.more-below__pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--color-primary-darkest); color: #fff;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 14px; border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(10, 53, 47, .25);
+}
+.more-below__pill svg { width: 16px; height: 16px; }
+.view-has-sticky { padding-bottom: 8px; }
 body.lab-native #view-who .who-dock,
 body.lab-mobile #view-who .who-dock { margin-left: 0; margin-right: 0; }
 
@@ -322,9 +362,10 @@ h3 { font-size: 1.25rem; line-height: 1.3; letter-spacing: -.02em; font-weight: 
 .btn--sm { min-height: 44px; padding: 8px 14px; }
 .btn-row { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 .sticky-cta {
-  position: sticky; bottom: 0; background: var(--color-white);
+  position: sticky; bottom: var(--proto-h); background: var(--color-white);
   border-top: 1px solid var(--color-gray-lighter); padding: 12px 16px;
-  margin: 24px -16px -16px; box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
+  margin: 24px -16px 0; box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
+  z-index: 80;
 }
 
 .chip-grid { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 20px; }
@@ -851,14 +892,19 @@ body.lab-desktop #results-lede { display: none; }
         <h2>Need an appointment?</h2>
         <p class="muted" style="margin-top:0">We will ask a few short questions, then show doctors you can book.</p>
         <div class="btn-row">
-          <button type="button" class="btn btn--primary" data-nav="who">Schedule an appointment</button>
           <button type="button" class="btn btn--secondary" id="home-someone">Book for someone else</button>
         </div>
       </div>
 
+      <div class="home-dock">
+        <div class="sticky-cta">
+          <button type="button" class="btn btn--primary btn--block" data-nav="who">Schedule an appointment</button>
+        </div>
+      </div>
+
       <details class="demo-tools">
-        <summary>Prototype tools</summary>
-        <p class="muted">Jump to sample screens for testing.</p>
+        <summary>Sample screens</summary>
+        <p class="muted">Optional jumps for critique. Not part of the Medicare flow.</p>
         <div class="chip-grid">
           <button type="button" class="chip" id="demo-empty">No matching doctors</button>
           <button type="button" class="chip" id="demo-slot-taken">Time no longer open</button>
@@ -905,7 +951,6 @@ body.lab-desktop #results-lede { display: none; }
         <div class="sticky-cta">
           <button type="button" class="btn btn--primary btn--block" id="who-continue">Continue</button>
         </div>
-        <div class="proto-banner" role="note">Prototype only</div>
       </div>
     </section>
 
@@ -929,7 +974,7 @@ body.lab-desktop #results-lede { display: none; }
         <svg class="alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
         <p><strong>Why we ask</strong> Advantage plans use a network. On Original Medicare, “In your plan” means the doctor accepts Medicare.</p>
       </div>
-      <div class="btn-row">
+      <div class="sticky-cta">
         <button type="button" class="btn btn--primary btn--block" id="coverage-continue">Continue</button>
       </div>
     </section>
@@ -943,7 +988,7 @@ body.lab-desktop #results-lede { display: none; }
       <label class="field" for="zip-input">ZIP code</label>
       <input id="zip-input" type="tel" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="e.g., 10001" />
       <p class="field-help" id="zip-help">5-digit U.S. ZIP. Prototype distances are sample miles near this ZIP.</p>
-      <div class="btn-row">
+      <div class="sticky-cta">
         <button type="button" class="btn btn--primary btn--block" id="location-continue" disabled>Continue</button>
       </div>
     </section>
@@ -975,7 +1020,7 @@ body.lab-desktop #results-lede { display: none; }
       <p class="field-help" style="margin-top:0">Chronic conditions help us understand ongoing care. They don’t replace the visit reason above.</p>
       <div class="chip-grid" id="chronic-chips" role="group" aria-label="Chronic conditions"></div>
 
-      <div class="btn-row">
+      <div class="sticky-cta">
         <button type="button" class="btn btn--primary btn--block" id="need-continue" disabled>Show doctors</button>
       </div>
     </section>
@@ -1050,9 +1095,9 @@ body.lab-desktop #results-lede { display: none; }
       <div class="card" id="review-card"></div>
       <label class="field" for="note-provider">Note to provider (optional)</label>
       <textarea id="note-provider" maxlength="280" placeholder="e.g., Follow-up on blood pressure meds"></textarea>
-      <div class="btn-row">
-        <button type="button" class="btn btn--primary" id="confirm-book">Book appointment</button>
-        <button type="button" class="btn btn--ghost" data-nav="doctor">Back</button>
+      <div class="sticky-cta">
+        <button type="button" class="btn btn--primary btn--block" id="confirm-book">Book appointment</button>
+        <button type="button" class="btn btn--ghost btn--block" data-nav="doctor" style="margin-top:8px">Back</button>
       </div>
     </section>
 
@@ -1095,7 +1140,13 @@ body.lab-desktop #results-lede { display: none; }
   </div>
 </div>
 
-<footer class="footer proto-banner" role="contentinfo">Prototype only</footer>
+<div class="more-below" id="more-below" hidden aria-hidden="true">
+  <span class="more-below__pill">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+    More below
+  </span>
+</div>
+<footer class="proto-footer" role="contentinfo">Prototype only</footer>
 
   </div>
   <div class="fold-line" id="fold-line" aria-hidden="true"><span>ABOVE THE FOLD</span></div>
@@ -1448,6 +1499,7 @@ body.lab-desktop #results-lede { display: none; }
     var screen = $('#phone-screen');
     if (screen) screen.scrollTop = 0;
     window.scrollTo(0, 0);
+    requestAnimationFrame(function () { if (typeof updateMoreBelow === 'function') updateMoreBelow(); });
     location.hash = name;
     render(name);
   }
@@ -2183,6 +2235,38 @@ body.lab-desktop #results-lede { display: none; }
     } catch (err) { top = 0; }
     chrome.classList.toggle('is-compact', top > 8);
   }
+
+  function getScrollRoot() {
+    var screen = document.getElementById('phone-screen');
+    var useScreen = screen && getComputedStyle(screen).overflowY !== 'visible';
+    return useScreen ? screen : document.scrollingElement || document.documentElement;
+  }
+  function updateMoreBelow() {
+    var el = $('#more-below');
+    if (!el) return;
+    var root = getScrollRoot();
+    var scrollTop = root === document.scrollingElement || root === document.documentElement
+      ? (window.scrollY || document.documentElement.scrollTop)
+      : root.scrollTop;
+    var clientH = root === document.scrollingElement || root === document.documentElement
+      ? window.innerHeight
+      : root.clientHeight;
+    var scrollH = root.scrollHeight;
+    var room = scrollH - clientH - scrollTop;
+    var show = room > 48;
+    el.hidden = !show;
+    el.setAttribute('aria-hidden', show ? 'false' : 'true');
+    el.classList.toggle('is-visible', show);
+  }
+  function bindMoreBelow() {
+    var screen = document.getElementById('phone-screen');
+    if (screen) screen.addEventListener('scroll', updateMoreBelow, { passive: true });
+    window.addEventListener('scroll', updateMoreBelow, { passive: true });
+    window.addEventListener('resize', updateMoreBelow);
+    updateMoreBelow();
+  }
+  bindMoreBelow();
+
   (function bindChromeScroll() {
     var screen = document.getElementById('phone-screen');
     if (screen) screen.addEventListener('scroll', updateChromeCompact, { passive: true });
