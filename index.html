@@ -80,15 +80,71 @@ a:hover { color: var(--color-primary-darker); }
 }
 .skip-link:focus { left: 8px; top: 8px; }
 
+.site-chrome {
+  position: sticky; top: 0; z-index: 120;
+  background: var(--color-primary-darkest);
+  box-shadow: 0 1px 0 rgba(0,0,0,.08);
+}
 .usa-banner {
-  background: var(--color-gray-lightest); border-bottom: 1px solid var(--color-gray-lighter);
-  font-size: 1rem; color: var(--color-gray-darker);
+  background: #f0f0f0; border-bottom: 1px solid var(--color-gray-lighter);
+  font-size: 12px; line-height: 1.2; color: var(--color-gray-darkest);
 }
 .usa-banner__inner {
   max-width: var(--max); margin: 0 auto; padding: 6px 16px;
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: nowrap; white-space: nowrap; overflow: hidden;
 }
-.usa-banner__flag { width: 16px; height: 11px; background: linear-gradient(#b22234 33%, #fff 33% 66%, #3c3b6e 66%); border: 1px solid #ccc; flex-shrink: 0; }
+.usa-banner__flag {
+  width: 18px; height: 12px; flex-shrink: 0; display: block;
+  border: 1px solid rgba(0,0,0,.15);
+}
+.usa-banner__text {
+  overflow: hidden; text-overflow: ellipsis; font-weight: 400;
+}
+.site-chrome.is-compact .usa-banner { font-size: 11px; }
+.site-chrome.is-compact .usa-banner__inner { padding: 4px 12px; }
+.site-chrome.is-compact .site-header__inner { padding: 6px 12px; }
+.site-chrome.is-compact .brand__mark { width: 28px; height: 28px; font-size: 11px; }
+.site-chrome.is-compact .brand__text { font-size: 1rem; }
+.site-chrome.is-compact .brand__sub { display: none; }
+.site-chrome.is-compact .header-actions .btn-chat,
+.site-chrome.is-compact #btn-login { display: none; }
+.site-chrome.is-compact .header-actions button { min-height: 36px; padding: 4px 10px; font-size: 0.875rem; }
+
+#view-who .choice-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 12px;
+}
+#view-who .choice {
+  flex-direction: column; align-items: flex-start; justify-content: flex-start;
+  min-height: 112px; padding: 16px 14px; text-align: left;
+  border-width: 2px; box-shadow: 0 1px 2px rgba(10,53,47,.06);
+}
+#view-who .choice__radio { margin-bottom: 10px; }
+#view-who .choice strong { font-size: 1.125rem; }
+#view-who .choice .choice__sub {
+  display: block; color: var(--color-gray-darker); font-size: 0.875rem;
+  font-weight: 400; margin-top: 6px; line-height: 1.3;
+}
+#view-who .lede { display: none; }
+#view-who .back-link { margin-bottom: 4px; }
+#view-who .who-dock {
+  position: sticky; bottom: 0; z-index: 80;
+  margin: 16px -16px 0; padding: 0;
+  background: var(--color-white);
+}
+#view-who .who-dock .sticky-cta {
+  margin: 0; border-top: 1px solid var(--color-gray-lighter);
+  box-shadow: 0 -4px 12px rgba(10, 53, 47, .06);
+}
+.proto-banner {
+  background: var(--color-primary-darkest); color: #fff;
+  text-align: center; font-size: 12px; font-weight: 600;
+  letter-spacing: .04em; text-transform: uppercase;
+  padding: 8px 12px;
+}
+body.lab-native #view-who .who-dock,
+body.lab-mobile #view-who .who-dock { margin-left: 0; margin-right: 0; }
+
 
 .site-header {
   background: var(--color-primary-darkest); color: var(--color-white);
@@ -673,18 +729,19 @@ body.lab-desktop #results-lede { display: none; }
   <div class="phone-safe-top" aria-hidden="true"></div>
   <div class="phone-screen" id="phone-screen">
 
+<div class="site-chrome" id="site-chrome">
 <div class="usa-banner" role="region" aria-label="Official government website">
   <div class="usa-banner__inner">
-    <span class="usa-banner__flag" aria-hidden="true"></span>
-    <span>An official website of the United States government — <strong>prototype only</strong>, not live Medicare.gov</span>
+    <img class="usa-banner__flag" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='12' viewBox='0 0 7410 3900'%3E%3Cpath fill='%23b22234' d='M0 0h7410v3900H0z'/%3E%3Cpath stroke='%23fff' stroke-width='300' d='M0 450h7410M0 1050h7410M0 1650h7410M0 2250h7410M0 2850h7410M0 3450h7410'/%3E%3Cpath fill='%233c3b6e' d='M0 0h2964v2100H0z'/%3E%3Cg fill='%23fff'%3E%3Cg id='s'%3E%3Cpolygon points='247,90 299.5,251.5 125.5,151.5 368.5,151.5 194.5,251.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" width="18" height="12" alt="" />
+    <span class="usa-banner__text">An official website of the United States government</span>
   </div>
 </div>
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="brand" href="#home" data-nav="home" aria-label="Medicare.gov home (prototype)">
+    <a class="brand" href="#home" data-nav="home" aria-label="Medicare.gov home">
       <span class="brand__mark" aria-hidden="true">M</span>
-      <span class="brand__text">Medicare.gov<span class="brand__sub">Appointment scheduler prototype</span></span>
+      <span class="brand__text">Medicare.gov<span class="brand__sub">Find care near you</span></span>
     </a>
     <div class="header-actions">
       <button type="button" id="btn-menu" aria-expanded="false" aria-controls="app-nav">Menu</button>
@@ -693,6 +750,7 @@ body.lab-desktop #results-lede { display: none; }
     </div>
   </div>
 </header>
+</div>
 
 <nav class="app-nav" id="app-nav" aria-label="Account">
   <div class="app-nav__inner">
@@ -720,7 +778,7 @@ body.lab-desktop #results-lede { display: none; }
         <p class="muted" style="margin-top:0">We’ll ask who it’s for, your coverage, and a ZIP — then what’s going on.</p>
         <div class="btn-row">
           <button type="button" class="btn btn--primary" data-nav="who">Schedule an appointment</button>
-          <button type="button" class="btn btn--secondary" id="home-someone">Book for someone I help</button>
+          <button type="button" class="btn btn--secondary" id="home-someone">Book for someone else</button>
         </div>
       </div>
 
@@ -743,23 +801,23 @@ body.lab-desktop #results-lede { display: none; }
     <section class="view" id="view-who" aria-labelledby="who-title">
       <button type="button" class="back-link" data-nav="home">← Back to home</button>
       <div class="progress" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span></div>
-      <p class="step-crumb">Step 1 of 4 · Who</p>
+      <p class="step-crumb">Step 1 of 4</p>
       <h1 id="who-title">Who is this visit for?</h1>
-      <p class="lede">Keep this light — you can change it later.</p>
       <div class="choice-grid" role="group" aria-label="Who the visit is for">
-        <button type="button" class="choice" data-who="me" aria-pressed="true">
+        <button type="button" class="choice is-selected" data-who="me" aria-pressed="true">
           <span class="choice__radio" aria-hidden="true"></span>
-          <span><strong>Me</strong><span>I’m booking for myself</span></span>
+          <strong>Me</strong>
+          <span class="choice__sub">I’m booking for myself</span>
         </button>
         <button type="button" class="choice" data-who="someone" aria-pressed="false">
           <span class="choice__radio" aria-hidden="true"></span>
-          <span><strong>Someone I help</strong><span>A spouse, parent, or person you care for</span></span>
+          <strong>Someone else</strong>
+          <span class="choice__sub">A spouse, parent, or person you care for</span>
         </button>
       </div>
       <div id="someone-fields" hidden>
         <label class="field" for="care-name">Their name</label>
         <input id="care-name" type="text" autocomplete="name" placeholder="e.g., Robert Chen" />
-        <p class="field-help">Used only in this prototype session.</p>
         <label class="field" for="care-rel">Your relationship</label>
         <select id="care-rel">
           <option>Spouse / partner</option>
@@ -769,8 +827,11 @@ body.lab-desktop #results-lede { display: none; }
           <option>Professional caregiver</option>
         </select>
       </div>
-      <div class="btn-row">
-        <button type="button" class="btn btn--primary btn--block" id="who-continue">Continue</button>
+      <div class="who-dock">
+        <div class="sticky-cta">
+          <button type="button" class="btn btn--primary btn--block" id="who-continue">Continue</button>
+        </div>
+        <div class="proto-banner" role="note">Prototype only</div>
       </div>
     </section>
 
@@ -960,9 +1021,7 @@ body.lab-desktop #results-lede { display: none; }
   </div>
 </div>
 
-<footer class="footer">
-  <p><strong>Prototype only.</strong> Not affiliated with live Medicare.gov booking. Medicare Green UI system. No network required (Inter font loads if available).</p>
-</footer>
+<footer class="footer proto-banner" role="contentinfo">Prototype only</footer>
 
   </div>
   <div class="fold-line" id="fold-line" aria-hidden="true"><span>ABOVE THE FOLD</span></div>
@@ -2038,6 +2097,24 @@ body.lab-desktop #results-lede { display: none; }
     renderHome();
     announce('Booking cleared');
   });
+
+
+  function updateChromeCompact() {
+    var chrome = document.getElementById('site-chrome');
+    if (!chrome) return;
+    var scroller = document.getElementById('phone-screen') || window;
+    var top = 0;
+    try {
+      top = scroller === window ? (window.scrollY || document.documentElement.scrollTop) : scroller.scrollTop;
+    } catch (err) { top = 0; }
+    chrome.classList.toggle('is-compact', top > 8);
+  }
+  (function bindChromeScroll() {
+    var screen = document.getElementById('phone-screen');
+    if (screen) screen.addEventListener('scroll', updateChromeCompact, { passive: true });
+    window.addEventListener('scroll', updateChromeCompact, { passive: true });
+    updateChromeCompact();
+  })();
 
   function fromHash() {
     var h = (location.hash || '#home').replace(/^#/, '') || 'home';
