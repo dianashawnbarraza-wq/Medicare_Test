@@ -1,8 +1,37 @@
-# Medicare.gov Appointment Scheduler — Prototype
+# Medicare.gov Appointment Scheduler — Zocdoc-feel explore
 
-**Stay Put** concept: a calm, mobile-first Medicare appointment flow that aims for **care need → booked in about 3 minutes**, with Zocdoc-class live slots and the July Medicare Green UI system.
+**This branch is an exploration fork for critique.** It is not the soft-launch Stay Put baseline.
 
-Single file, no build step. Inter font loads from Google Fonts when online; system sans fallbacks work offline.
+Stay Put (calm directory + trust chips) lives on `cursor/medicare-green-trust-flow-1ef6`. This fork keeps Medicare.gov branding, Medicare Green tokens, Inter, and the 20px body floor, then pushes the flow toward **Zocdoc-class consumer booking**: results as a booking surface, day strips, on-card times, and faster tap-to-book.
+
+Single file, no build step. Inter loads from Google Fonts when online; system sans fallbacks work offline.
+
+## Compare this fork vs Stay Put
+
+| | Stay Put (`cursor/medicare-green-trust-flow-1ef6`) | This fork (`cursor/zocdoc-feel-explore-450d`) |
+|---|---|---|
+| Intent | Soft-launch baseline. Calm, trustworthy, above-the-fold bake-in | Critique exploration. Consumer booking speed |
+| Results | Compact provider rows, 3 next slots | Bigger cards: avatar, rating line, trust badges, 4 slot chips + More times |
+| Date picking | None on the list | Horizontal day strip filters which times show on cards |
+| Need | Reason rows + search | Grouped typeahead (Visit reasons / Specialties), larger reason rows, chronic refine in a secondary details block |
+| Filters | Trust defaults only in the sheet | Trust defaults plus Morning / Afternoon, In person / Video, This week |
+| Book | Next-day control, 3-column grid, 6 times | Day strip, denser grid, View more availability when a day is empty |
+| Home | Simple upcoming tile | Rich card: who / when / where / Add to calendar |
+| Prototype only | Sticky bar at the bottom | **Scrolls with the page** (static). Sticky Schedule / Continue / Show doctors / Book stay at `bottom: 0` |
+
+Open both locally and flip between them:
+
+```bash
+# Stay Put baseline (other checkout / other branch)
+git checkout cursor/medicare-green-trust-flow-1ef6
+python3 -m http.server 8765
+
+# This Zocdoc-feel fork
+git checkout cursor/zocdoc-feel-explore-450d
+python3 -m http.server 8766
+```
+
+Or open `index.html` directly in a browser on each branch. Hash routes work offline (`#home`, `#who`, `#need`, `#results`, …). Booking persists in `localStorage`.
 
 ## Open it
 
@@ -14,58 +43,39 @@ python3 -m http.server 8765 --directory /workspace
 # then visit http://localhost:8765/
 ```
 
-Hash routes work offline (`#home`, `#who`, `#need`, `#results`, …). Booking persists in `localStorage` so a refresh still shows the Home tile.
-
 ## Design Lab preview (Mobile / Desktop)
 
 A **Design Lab** bar sits above the prototype:
 
-- **Mobile** (default) — 390×844 phone frame with safe area. A **red dashed line** labeled **ABOVE THE FOLD** is fixed at the bottom of the visible phone (above the home indicator). Results and Book are baked so the first doctor’s times and Continue sit above that line — no scroll required for the pass/fail.
+- **Mobile** (default) — 390×844 phone frame with safe area. A **red dashed line** labeled **ABOVE THE FOLD** is fixed at the bottom of the visible phone.
 - **Desktop** — full-width **2-column** layout (list | detail), not a scaled-up phone.
 
 Toggle **Mobile / Desktop** in the dark bar at the top. The choice sticks in `localStorage`. Deep-link: `index.html?preview=desktop` or `?preview=mobile`.
 
-**Results pass/fail:** tap a time on doctor #1 without scrolling.  
-**Book pass/fail:** select a slot and see **Continue** without scrolling. Empty days show **No times** + **Show next day** above the fold. Continue is hidden until a time is selected so the slot grid keeps the pixels.
+The hint text says **Zocdoc-feel explore** so it is obvious you are not on Stay Put.
 
-## Happy path (Stay Put)
+## Happy path
 
-**Book for someone I help** is a **secondary outline CTA** on Home — Who stays a light first step.
+**Book for someone else** is a secondary outline CTA on Home.
 
-1. **Home** — Greeting, coverage note (Advantage vs Original), upcoming tile, primary **Schedule an appointment**.
-2. **Who** — Me / someone I help.
+1. **Home** — Greeting, coverage note, rich upcoming card when booked, sticky **Schedule an appointment**.
+2. **Who** — Me / someone else.
 3. **Coverage** — Original vs Advantage (changes what “In your plan” means).
 4. **ZIP** — Location for “Near you.”
-5. **Need** — Visit-reason list + search (Zocdoc-style). Optional chronic-condition refine chips. Mapped specialty shown before results.
-6. **Results** — Sticky trust chips always on: In your plan · Accepting new patients · Near you. Badges on every card. Compact rating on the card when mock data has it (not a filter). Show more options (bottom sheet) + warning to turn defaults off.
-7. **Select appointment** — New / existing patient toggle changes slot inventory. Results already filtered for accepting when that default is on.
-8. **Review → Book** — Then **You’re booked** and a Home upcoming tile. Reschedule Next is a disabled stub.
+5. **Need** — Search with Visit reasons / Specialties groups, large browseable reason rows, optional chronic refine.
+6. **Results** — Sticky trust chips, day strip, booking cards with badges and tappable times.
+7. **Book** — New / existing patient toggle, day strip, denser time grid.
+8. **Review → Book** — Then **You’re booked** and the Home upcoming card.
 
-## Concept bets
+## Prototype only + sticky CTAs
 
-| Bet | Why |
-|---|---|
-| Trust defaults as sticky chips + on-card badges | In-plan + accepting before browse; turning off is explicit |
-| Visit-reason chips + search | Plain language in, specialty out — chronic refine is secondary |
-| Coverage before search | Advantage network ≠ Original assignment |
-| Slots on card + hero on doctor page | Fewer screens; Zocdoc-class |
-| New/existing toggle on picker | Inventory, not a substitute for the accepting-new default |
-| Home appointment tile | No message-center digging |
-| Ratings on cards only | Signal without becoming a sort/filter |
-| Caregiver as light Who step | Happy path stays short |
-
-## Honest states (demo on Home)
-
-- No in-plan + accepting — empty results
-- Slot taken — conflict screen
-- Clinic will call — not You are booked
-- Telehealth only
-- Clear booking — resets saved booking
-- Providers that are out-of-plan, not accepting, or farther appear only after defaults are turned off
+- One **Prototype only** line, in document flow at the bottom (`position: static`). It scrolls away and can pass under the sticky CTA.
+- Schedule / Continue / Show doctors / Book stay `position: sticky; bottom: 0`.
+- **More below** still appears when content overflows.
 
 ## Design system
 
-Medicare Green (`#146A5D` → `#0A352F`), secondary blue for pills/alerts, Inter, 20px body floor, 16px labels/buttons, 44px targets, 3px `#2A6FB8` focus rings, skip link, live region for view changes, reduced-motion respect, text badges. Mobile critique uses a 390×844 phone + fold line. Desktop preview is an intentional 2-column list | detail (no map on Results/Book). Filters stay chips + sheet below the fold — not a left rail.
+Medicare Green (`#146A5D` → `#0A352F`), secondary blue for pills/alerts, Inter, 20px body floor, 16px labels/buttons, 44px targets, 3px `#2A6FB8` focus rings. Ratings stay on cards only, never as a top-level sort.
 
 ## Files
 
@@ -73,8 +83,8 @@ Medicare Green (`#146A5D` → `#0A352F`), secondary blue for pills/alerts, Inter
 - README.md — this file
 - LIZ-NOTES.md — typography + DS flags
 - refs/taxonomy.md — visit reason → specialty
-- refs/patterns-and-taxonomy.md — pattern research
+- refs/patterns-and-taxonomy.md — Mobbin / Zocdoc pattern research
 
 ## Out of scope
 
-Live Medicare APIs, real eligibility, calendars or maps, front-end frameworks, auth.
+Live Medicare APIs, real eligibility, calendars or maps, front-end frameworks, auth. This fork should not be merged as the Stay Put baseline without a separate product decision.
