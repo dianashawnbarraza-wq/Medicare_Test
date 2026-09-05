@@ -1578,7 +1578,7 @@ body.lab-desktop #results-lede { display: none; }
     var plan = state.trust.plan
       ? (state.coverage === 'original' ? 'Accepts assignment' : 'In your plan')
       : 'Plan filter off';
-    var acc = state.trust.accepting ? 'Accepting' : 'Accepting off';
+    var acc = state.trust.accepting ? 'Taking new patients' : 'Taking new patients: off';
     return spec + ' · ' + plan + ' · ' + acc;
   }
 
