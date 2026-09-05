@@ -154,13 +154,33 @@ a:hover { color: var(--color-primary-darker); }
 }
 .header-actions #btn-menu:hover { background: var(--color-surface); }
 
-/* Compact on scroll: tighten, keep white Medicare header */
-.site-chrome.is-compact .usa-banner__inner { padding: 4px 16px; }
-.site-chrome.is-compact .usa-banner__know { display: none; }
-.site-chrome.is-compact .usa-banner__panel { display: none !important; }
-.site-chrome.is-compact .site-header__inner { padding: 6px 16px; }
+/* Compact on scroll: tighten + trust icon */
+.site-chrome.is-compact .usa-banner { display: none; }
+.site-chrome.is-compact .site-header__inner { padding: 6px 16px; gap: 8px; }
 .site-chrome.is-compact .brand__text { font-size: 1.15rem; }
 .site-chrome.is-compact .header-actions #btn-menu { min-height: 36px; padding: 6px 12px; font-size: 0.9375rem; }
+.trust-mark {
+  display: none;
+  align-items: center; gap: 6px;
+  margin-left: auto; margin-right: 8px;
+  padding: 4px 8px 4px 4px;
+  border-radius: 999px;
+  background: var(--color-surface);
+  border: 1px solid #dfe1e2;
+  color: var(--color-primary-darkest);
+  font-size: 11px; font-weight: 600; line-height: 1;
+  white-space: nowrap;
+}
+.trust-mark__icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff; display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.trust-mark__icon svg { width: 12px; height: 12px; display: block; }
+.site-chrome.is-compact .trust-mark { display: inline-flex; }
+.site-chrome.is-compact .header-actions { margin-left: 0; }
+
 
 /* Desktop can show login/chat again */
 @media (min-width: 960px) {
@@ -787,6 +807,16 @@ body.lab-desktop #results-lede { display: none; }
     <a class="brand" href="#home" data-nav="home" aria-label="Medicare.gov home">
       <span class="brand__text">Medicare<span class="brand__gov">.gov</span></span>
     </a>
+    <span class="trust-mark" title="Official .gov website" aria-label="Official United States government website">
+      <span class="trust-mark__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2l8 3v6c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V5l8-3z" fill="currentColor" opacity=".2"/>
+          <path d="M12 2l8 3v6c0 5.25-3.4 9.74-8 11-4.6-1.26-8-5.75-8-11V5l8-3z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+          <path d="M9.5 12.2l1.8 1.8 3.7-3.8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>.gov</span>
+    </span>
     <div class="header-actions">
       <button type="button" id="btn-menu" aria-expanded="false" aria-controls="app-nav" aria-label="Menu">Menu</button>
       <button type="button" id="btn-login" title="Stub">Log in</button>
