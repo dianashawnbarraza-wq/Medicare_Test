@@ -265,9 +265,10 @@ body.lab-desktop .more-below {
   bottom: 64px;
 }
 #view-home {
-  display: flex; flex-direction: column;
+  flex-direction: column;
   min-height: calc(100dvh - 220px);
 }
+#view-home.is-active { display: flex; }
 #view-home .home-dock { margin-top: auto; }
 body.lab-mobile.lab-fold .proto-footer,
 body.lab-mobile.lab-fold .more-below { display: none !important; }
@@ -566,11 +567,11 @@ input.is-error { border-color: var(--color-error); }
 .more-options[hidden] { display: none; }
 .more-options label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 600; font-size: 1.25rem; }
 .sheet-scrim {
-  display: none; position: fixed; inset: 0; background: rgba(10, 53, 47, .4); z-index: 40;
+  display: none; position: fixed; inset: 0; background: rgba(10, 53, 47, .4); z-index: 90;
 }
 .sheet-scrim.is-open { display: block; }
 .filter-sheet {
-  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 41;
+  display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 91;
   background: var(--color-white); border-radius: 16px 16px 0 0;
   padding: 16px; max-height: 80vh; overflow: auto;
   box-shadow: 0 -8px 24px rgba(10, 53, 47, .16);
@@ -1316,6 +1317,18 @@ body.lab-desktop #results-lede { display: none; }
         ['thu', 'Thu', 'Sep 10', ['9:00 AM', '9:30 AM', '10:30 AM', '11:00 AM', '2:00 PM', '3:30 PM'], ['8:30 AM', '9:00 AM', '9:30 AM', '10:30 AM', '11:00 AM', '2:00 PM', '3:30 PM']],
         ['fri', 'Fri', 'Sep 11', ['11:00 AM', '11:30 AM', '1:00 PM', '2:00 PM', '3:00 PM', '3:30 PM'], ['11:00 AM', '11:30 AM', '1:00 PM', '2:00 PM', '3:00 PM', '3:30 PM']],
         ['mon', 'Mon', 'Sep 14', ['9:30 AM', '10:00 AM', '1:00 PM', '1:30 PM', '4:00 PM', '4:30 PM'], ['9:30 AM', '10:00 AM', '1:00 PM', '1:30 PM', '4:00 PM', '4:30 PM']],
+        ['tue', 'Tue', 'Sep 15', [], []]
+      ])
+    },
+    {
+      id: 'blake', name: 'Dr. Nora Blake', initials: 'NB', specialty: 'Primary care',
+      plain: 'Primary care doctor', miles: 2.6, rating: 4.7, reviews: 156,
+      address: '440 Harbor Ave', city: 'Your city',
+      tele: true, accepting: true, inNetwork: true, acceptsAssignment: true,
+      days: days([
+        ['thu', 'Thu', 'Sep 10', ['10:00 AM', '10:30 AM', '11:00 AM', '2:30 PM', '3:00 PM', '3:30 PM'], ['10:00 AM', '10:30 AM', '11:00 AM', '2:30 PM', '3:00 PM', '3:30 PM']],
+        ['fri', 'Fri', 'Sep 11', ['9:00 AM', '9:30 AM', '1:00 PM', '1:30 PM', '2:00 PM', '4:00 PM'], ['9:00 AM', '9:30 AM', '1:00 PM', '1:30 PM', '2:00 PM', '4:00 PM']],
+        ['mon', 'Mon', 'Sep 14', ['8:30 AM', '9:00 AM', '11:30 AM', '1:00 PM', '3:00 PM', '3:30 PM'], ['8:30 AM', '9:00 AM', '11:30 AM', '1:00 PM', '3:00 PM', '3:30 PM']],
         ['tue', 'Tue', 'Sep 15', [], []]
       ])
     },
