@@ -578,6 +578,10 @@ input.is-error { border-color: var(--color-error); }
 }
 .filter-sheet.is-open { display: block; }
 .filter-sheet h2 { font-size: 1.25rem; }
+.filter-sheet .btn-row {
+  position: sticky; bottom: 0; background: var(--color-white);
+  padding: 12px 0 4px; margin-top: 16px;
+}
 
 .results-layout { display: grid; gap: 16px; }
 .summary-panel { display: none; }
@@ -879,6 +883,15 @@ body.lab-mobile .filter-sheet {
   position: absolute;
 }
 body.lab-mobile .filter-sheet { left: 0; right: 0; bottom: 34px; }
+/* Phone chrome home indicator. Keep CTAs usable in the Design Lab frame. */
+body.lab-mobile .sticky-cta,
+body.lab-mobile .who-dock,
+body.lab-mobile .home-dock {
+  bottom: 34px;
+}
+body.lab-mobile .more-below {
+  bottom: 98px;
+}
 
 /* Desktop: list | detail (not scaled mobile) */
 body.lab-desktop .results-layout {
@@ -2015,7 +2028,7 @@ body.lab-desktop #results-lede { display: none; }
         var sel = state.slot === t && state.dayKey === day.key;
         return '<button type="button" class="time-chip' + (sel ? ' is-selected' : '') + '" data-slot-pick="' + t + '" aria-pressed="' + sel + '">' + t + '</button>';
       }).join('');
-      if (moreBtn) moreBtn.hidden = open.length > 4;
+      if (moreBtn) moreBtn.hidden = true;
     }
 
     var sticky = $('#doctor-sticky');
