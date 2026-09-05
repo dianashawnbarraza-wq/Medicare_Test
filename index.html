@@ -252,11 +252,25 @@ a:hover { color: var(--color-primary-darker); }
 body.lab-native .home-dock,
 body.lab-mobile .home-dock { margin-left: 0; margin-right: 0; }
 .more-below {
-  position: sticky; bottom: calc(var(--proto-h) + 56px); z-index: 70;
+  position: absolute; left: 0; right: 0;
+  bottom: calc(var(--proto-h) + 64px); z-index: 85;
   display: flex; justify-content: center; pointer-events: none;
-  margin: -40px 0 8px; opacity: 0; transition: opacity .2s ease;
+  margin: 0; opacity: 0; transition: opacity .2s ease;
 }
 .more-below.is-visible { opacity: 1; }
+body.lab-native .more-below,
+body.lab-desktop .more-below {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(var(--proto-h) + 64px);
+}
+#view-home {
+  display: flex; flex-direction: column;
+  min-height: calc(100dvh - 220px);
+}
+#view-home .home-dock { margin-top: auto; }
+body.lab-mobile.lab-fold .proto-footer,
+body.lab-mobile.lab-fold .more-below { display: none !important; }
 .more-below__pill {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--color-primary-darkest); color: #fff;
@@ -700,7 +714,8 @@ body.lab-native .filter-sheet { bottom: 0; }
 body.lab-mobile.lab-fold .usa-banner,
 body.lab-mobile.lab-fold .site-header,
 body.lab-mobile.lab-fold .app-nav,
-body.lab-mobile.lab-fold .footer { display: none; }
+body.lab-mobile.lab-fold .footer,
+body.lab-mobile.lab-fold .proto-footer { display: none; }
 body.lab-mobile.lab-fold .wrap { padding: 8px 12px 12px; max-width: none; }
 body.lab-mobile.lab-fold .sticky-cta { margin-left: -12px; margin-right: -12px; }
 
@@ -896,12 +911,6 @@ body.lab-desktop #results-lede { display: none; }
         </div>
       </div>
 
-      <div class="home-dock">
-        <div class="sticky-cta">
-          <button type="button" class="btn btn--primary btn--block" data-nav="who">Schedule an appointment</button>
-        </div>
-      </div>
-
       <details class="demo-tools">
         <summary>Sample screens</summary>
         <p class="muted">Optional jumps for critique. Not part of the Medicare flow.</p>
@@ -916,6 +925,12 @@ body.lab-desktop #results-lede { display: none; }
           <button type="button" class="chip" id="demo-clear">Clear sample booking</button>
         </div>
       </details>
+
+      <div class="home-dock">
+        <div class="sticky-cta">
+          <button type="button" class="btn btn--primary btn--block" data-nav="who">Schedule an appointment</button>
+        </div>
+      </div>
     </section>
 
     <section class="view" id="view-who" aria-labelledby="who-title">
