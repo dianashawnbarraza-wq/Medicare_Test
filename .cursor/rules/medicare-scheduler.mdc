@@ -5,10 +5,12 @@ alwaysApply: true
 
 # Medicare Scheduler (Stay Put)
 
-- CMS Design System feel: primary #0071bc, header #00395e
-- Body text floor **20px** (Liz/DS). 16px only for labels/disclaimers. 16px = 1rem.
-- Trust defaults always visible: In your plan, Accepting new patients, Near you
-- Mobile-first; 44px touch targets; accessible for 65+
+- CMS / Triptych UI system: **Medicare Green** primary `#146A5D` (hover `#1D4E45`, pressed `#0A352F`, lightest `#E8F0EF`, surface `#F4F7F5`). Header `#0A352F`. Secondary blue for pills/alerts `#0E3E6E` / `#DCEAF5` / `#EAF3FA`.
+- Font **Inter**. Body text floor **20px** (Liz/DS). 16px only for labels/disclaimers/buttons. 16px = 1rem.
+- Trust defaults always visible: In your plan, Accepting new patients, Near you. Badges on every card. Off requires Show more + warning.
+- Ratings on cards only — not a top-level filter/sort.
+- Visit-reason chips + search (Zocdoc-style). Chronic conditions are optional refine, not a separate product.
+- Mobile-first; 44px touch targets; accessible for 65+. Filters as sticky chips + bottom sheet, not a desktop-only left rail.
 - Start fresh v2 concepts; do not overload sensitive v1 reskin page
 - Concept freer; Figma handoff must use Triptych/CMS components consistently
 - Partners: Sunfire (network), Zocdoc (scheduling)
